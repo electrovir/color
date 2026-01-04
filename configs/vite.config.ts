@@ -1,5 +1,5 @@
 import {mergeDeep} from '@augment-vir/common';
-import {defineConfig} from '@virmator/frontend/configs/vite.config.base.ts';
+import {defineConfig} from '@virmator/frontend/configs/vite.config.base.js';
 import {join, resolve} from 'node:path';
 
 export default defineConfig(
