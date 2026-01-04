@@ -2,5 +2,8 @@ export * from './color-class/color-formats.js';
 export * from './color-class/color-name-length.js';
 export * from './color-class/color.js';
 export * from './contrast/contrast.js';
+export * from './elements/vir-all-color-space-sliders.element.js';
+export * from './elements/vir-color-format-sliders.element.js';
 export * from './elements/vir-color-pair.element.js';
+export * from './elements/vir-color-slider.element.js';
 export * from './elements/vir-contrast-indicator.element.js';

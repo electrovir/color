@@ -2,7 +2,9 @@ import {assert, assertWrap, check} from '@augment-vir/assert';
 import {
     copyThroughJson,
     filterMap,
+    getEnumValues,
     getObjectTypedEntries,
+    getObjectTypedKeys,
     joinWithFinalConjunction,
     mapObjectValues,
     round,
@@ -13,12 +15,12 @@ import colorNames from 'color-name';
 import {clampGamut, converter, formatHex, parse, type Color as CuloriColor} from 'culori';
 import {type RequireExactlyOne} from 'type-fest';
 import {
-    colorFormatNames,
+    ColorFormatName,
     colorFormats,
+    type ColorCoordinateDefinition,
     type ColorCoordinateName,
     type ColorCoordsByFormat,
-    type ColorFormatName,
-    type ColorValues,
+    type ColorValue,
     type HexColor,
 } from './color-formats.js';
 import {maxColorNameLength} from './color-name-length.js';
@@ -45,7 +47,7 @@ export type ColorUpdate = RequireExactlyOne<
  *
  * @category Internal
  */
-export type AllColorsValues = ColorValues & {hex: HexColor; names: string[]};
+export type AllColorsValues = ColorValue & {hex: HexColor; names: string[]};
 
 /**
  * A `Color` class with state and the following features:
@@ -187,11 +189,12 @@ export class Color {
             const colorFormatDefinition = colorFormats[colorFormatName];
 
             const orderedColorCoords = Object.values(
-                mapObjectValues(colorFormatDefinition.coords, (coordName) => {
+                mapObjectValues(colorFormatDefinition.coords, (coordName: ColorCoordinateName) => {
                     const coordValue = colorValues[coordName];
-                    const coordDefinition = assertWrap.isDefined(
-                        colorFormatDefinition.coords[coordName],
-                    );
+                    const coordDefinition: ColorCoordinateDefinition =
+                        colorFormatDefinition.coords[
+                            assertWrap.isKeyOf(coordName, colorFormatDefinition.coords)
+                        ];
 
                     const rawCoordValue =
                         coordValue != undefined &&
@@ -213,7 +216,7 @@ export class Color {
      * internal color object.
      */
     protected pullFromInternalColor() {
-        colorFormatNames.forEach((colorFormatName) => {
+        getEnumValues(ColorFormatName).forEach((colorFormatName) => {
             const colorFormatDefinition = colorFormats[colorFormatName];
             const originalColorDefinition = check.isKeyOf(this.#internalColor.mode, colorFormats)
                 ? colorFormats[this.#internalColor.mode]
@@ -232,16 +235,21 @@ export class Color {
                 );
             }
 
-            Object.keys(this[colorFormatName]).forEach((coordName) => {
+            getObjectTypedKeys(this[colorFormatName]).forEach((coordName: ColorCoordinateName) => {
                 const coordValue = (
                     converted as AnyObject as Record<ColorCoordinateName, number | undefined | null>
-                )[coordName as ColorCoordinateName];
+                )[coordName];
+
+                const coordinateDefinition: ColorCoordinateDefinition =
+                    colorFormatDefinition.coords[
+                        assertWrap.isKeyOf(coordName, colorFormatDefinition.coords)
+                    ];
 
                 if (coordValue != undefined) {
                     (this._allColors[colorFormatName] as Record<string, number>)[coordName] = round(
-                        (coordValue || 0) * (colorFormatDefinition.coords[coordName]?.factor || 1),
+                        (coordValue || 0) * (coordinateDefinition.factor || 1),
                         {
-                            digits: colorFormatDefinition.coords[coordName]?.digits || 0,
+                            digits: coordinateDefinition.digits || 0,
                         },
                     );
                 }
@@ -340,7 +348,7 @@ export class Color {
     }
 }
 
-function findMatchingColorNames(rgb: Readonly<ColorValues['rgb']>): string[] {
+function findMatchingColorNames(rgb: Readonly<ColorValue['rgb']>): string[] {
     return filterMap(
         getObjectTypedEntries(colorNames),
         ([

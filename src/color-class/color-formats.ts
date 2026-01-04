@@ -1,7 +1,8 @@
 import {
     type AnyObject,
+    arrayToObject,
     getObjectTypedEntries,
-    getObjectTypedKeys,
+    getObjectTypedValues,
     getOrSet,
     mapObjectValues,
     type PartialWithUndefined,
@@ -39,17 +40,6 @@ export type ColorCoordinateDefinition = {
     factor?: number | undefined;
     suffix?: string;
 }>;
-
-/**
- * A single color format definition.
- *
- * @category Internal
- */
-export type ColorFormatDefinition<ColorSpace extends string = string> = {
-    coords: Record<string, ColorCoordinateDefinition>;
-    /** This name for this color to be used in `Colorjs.to()`. Defaults to the color format key. */
-    colorSpace: ColorSpace;
-};
 
 /**
  * All raw supported color formats.
@@ -195,23 +185,31 @@ export const rawColorFormats = {
         },
         colorSpace: 'oklab',
     },
-} as const satisfies Record<string, ColorFormatDefinition>;
+} as const satisfies Record<
+    string,
+    {
+        coords: Record<string, ColorCoordinateDefinition>;
+        colorSpace: string;
+    }
+>;
 
 /**
- * All supported color format names. This can be used as an enum.
+ * All supported color format names.
  *
  * @category Internal
+ * @enum
  */
 export const ColorFormatName = mapObjectValues(
     rawColorFormats,
     (colorName) => colorName,
 ) satisfies Record<ColorFormatName, ColorFormatName> as AnyObject as {
-    [FormatName in ColorFormatName]: FormatName;
+    [Key in ColorFormatName]: Key;
 };
 /**
- * All supported color format names. This can be used as an enum.
+ * All supported color format names.
  *
  * @category Internal
+ * @enum
  */
 export type ColorFormatName = keyof typeof rawColorFormats;
 
@@ -232,32 +230,61 @@ export type ColorCoordsByFormat = {
  */
 export type ColorFormats = Readonly<{
     [FormatName in ColorFormatName]: ColorFormatDefinition<
-        'colorSpace' extends keyof (typeof rawColorFormats)[FormatName]
-            ? Extract<(typeof rawColorFormats)[FormatName], {colorSpace: any}>['colorSpace']
-            : FormatName
+        Extract<(typeof rawColorFormats)[FormatName], {colorSpace: any}>['colorSpace'],
+        FormatName
     >;
 }>;
-
 /**
  * All supported color formats.
  *
  * @category Color Format
  */
-export const colorFormats = rawColorFormats as ColorFormats;
+export const colorFormats = mapObjectValues(
+    rawColorFormats,
+    (colorFormatName, colorFormatValue) => {
+        return {
+            ...colorFormatValue,
+            colorFormat: colorFormatName,
+        } satisfies ColorFormatDefinition;
+    },
+) satisfies Record<ColorFormatName, ColorFormatDefinition> as Record<
+    ColorFormatName,
+    ColorFormatDefinition
+> as ColorFormats;
 
 /**
- * All available color space names.
+ * All supported color space names.
  *
  * @category Internal
+ * @enum
  */
 export type ColorSpaceName = Values<typeof rawColorFormats>['colorSpace'];
+
+/**
+ * All supported color space names.
+ *
+ * @category Internal
+ * @enum
+ */
+export const ColorSpaceName = arrayToObject(
+    getObjectTypedValues(rawColorFormats),
+    (format) => {
+        return {
+            key: format.colorSpace,
+            value: format.colorSpace,
+        };
+    },
+    {
+        useRequired: true,
+    },
+) as {[Key in ColorSpaceName]: Key};
 
 /**
  * All value types for all supported color formats.
  *
  * @category Internal
  */
-export type ColorValues = {
+export type ColorValue = {
     [FormatName in ColorFormatName]: Record<
         keyof (typeof rawColorFormats)[FormatName]['coords'],
         number
@@ -269,7 +296,7 @@ export type ColorValues = {
  *
  * @category Color Format
  */
-export const colorSpaces = getObjectTypedEntries(colorFormats).reduce(
+export const colorFormatsBySpace = getObjectTypedEntries(colorFormats).reduce(
     (
         accum,
         [
@@ -283,14 +310,11 @@ export const colorSpaces = getObjectTypedEntries(colorFormats).reduce(
         return accum;
     },
     {} as Record<ColorSpaceName, Record<ColorFormatName, ColorFormatDefinition>>,
-);
-
-/**
- * All color format names in an array.
- *
- * @category Internal
- */
-export const colorFormatNames: ColorFormatName[] = getObjectTypedKeys(colorFormats);
+) satisfies Record<ColorSpaceName, Record<ColorFormatName, ColorFormatDefinition>> as {
+    [ColorSpace in ColorSpaceName]: {
+        [ColorFormat in ColorFormatName]: ColorFormatDefinition<ColorSpace, ColorFormat>;
+    };
+};
 
 /**
  * All possible coordinate names for all supported color formats in a union.
@@ -300,3 +324,19 @@ export const colorFormatNames: ColorFormatName[] = getObjectTypedKeys(colorForma
 export type ColorCoordinateName = keyof UnionToIntersection<
     Values<typeof rawColorFormats>['coords']
 >;
+
+/**
+ * A single color format definition.
+ *
+ * @category Internal
+ */
+export type ColorFormatDefinition<
+    ColorSpace extends ColorSpaceName = any,
+    ColorFormat extends ColorFormatName = any,
+> = {
+    /** Which exact color coordinates exist in here depends on the set color space. */
+    coords: Record<ColorCoordsByFormat[ColorFormat], ColorCoordinateDefinition>;
+    /** This name for this color to be used in `Colorjs.to()`. Defaults to the color format key. */
+    colorSpace: ColorSpace;
+    colorFormat: ColorFormat;
+};

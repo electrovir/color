@@ -1,6 +1,6 @@
 import {assert} from '@augment-vir/assert';
 import {describe, it} from '@augment-vir/test';
-import {type ColorValues, type HexColor} from './color-formats.js';
+import {type ColorValue, type HexColor} from './color-formats.js';
 
 describe('HexColor', () => {
     it('is compatible with hex color strings', () => {
@@ -10,7 +10,7 @@ describe('HexColor', () => {
 
 describe('ColorValues', () => {
     it('has all color coordinates', () => {
-        assert.tsType<ColorValues>().equals<{
+        assert.tsType<ColorValue>().equals<{
             rgb: Record<'r' | 'g' | 'b', number>;
             hsl: Record<'h' | 's' | 'l', number>;
             hwb: Record<'b' | 'h' | 'w', number>;
