@@ -2,8 +2,8 @@
 
 import {checkWrap} from '@augment-vir/assert';
 import {css, defineElement, html, unsafeCSS} from 'element-vir';
-import {Color, type ColorUpdate} from './color.js';
-import {allExamples} from './color.mock.js';
+import {Color, type ColorUpdate} from './color-class/color.js';
+import {allExamples} from './color-class/color.mock.js';
 
 const VirExample = defineElement<{example: string | ColorUpdate}>()({
     tagName: 'vir-example',
