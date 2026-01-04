@@ -41,7 +41,7 @@ export type ColorUpdate = RequireExactlyOne<
 
 /**
  * The values of all supported color formats for a given {@link Color} instance. Accessed via
- * {@link Color.allColors}.
+ * `Color.allColors`.
  *
  * @category Internal
  */
@@ -59,6 +59,13 @@ export type AllColorsValues = ColorValues & {hex: HexColor; names: string[]};
  * @category Color
  */
 export class Color {
+    constructor(
+        /** Any valid CSS color string or an object of color coordinate values. */
+        initValue: string | Readonly<ColorUpdate>,
+    ) {
+        this.set(initValue);
+    }
+
     /**
      * Create a new {@link Color} instance by parsing the output of another instance's
      * {@link Color.serialize} method.
@@ -126,13 +133,6 @@ export class Color {
             h: 0 as number,
         },
     };
-
-    constructor(
-        /** Any valid CSS color string or an object of color coordinate values. */
-        initValue: string | Readonly<ColorUpdate>,
-    ) {
-        this.set(initValue);
-    }
 
     /** Create a new {@link Color} instance that matches this one exactly. */
     public clone(): Color {

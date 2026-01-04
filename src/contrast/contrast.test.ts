@@ -1,5 +1,11 @@
 import {describe, itCases} from '@augment-vir/test';
-import {calculateContrast, ContrastLevelName, contrastLevelNameMap} from './contrast.js';
+import {
+    calculateContrast,
+    ContrastLevelName,
+    contrastLevelNameMap,
+    findClosestColor,
+    findColorAtContrastLevel,
+} from './contrast.js';
 
 describe(calculateContrast.name, () => {
     itCases(calculateContrast, [
@@ -46,6 +52,121 @@ describe(calculateContrast.name, () => {
                 },
                 contrastLevel: contrastLevelNameMap[ContrastLevelName.Invisible],
             },
+        },
+    ]);
+});
+
+describe(findClosestColor.name, () => {
+    itCases(findClosestColor, [
+        {
+            it: 'finds exact match when available',
+            inputs: [
+                'white',
+                [
+                    'white',
+                    'black',
+                ],
+            ],
+            expect: 'white',
+        },
+        {
+            it: 'finds the closest color by contrast',
+            inputs: [
+                'white',
+                [
+                    'gray',
+                    'black',
+                ],
+            ],
+            expect: 'gray',
+        },
+        {
+            it: 'returns last color with lowest contrast when multiple have same contrast',
+            inputs: [
+                '#808080',
+                [
+                    'white',
+                    'black',
+                ],
+            ],
+            expect: 'black',
+        },
+    ]);
+});
+
+describe(findColorAtContrastLevel.name, () => {
+    itCases(findColorAtContrastLevel, [
+        {
+            it: 'finds a color at the desired contrast level with foreground array',
+            inputs: [
+                {
+                    foreground: [
+                        'black',
+                        'gray',
+                        'white',
+                    ],
+                    background: 'white',
+                },
+                ContrastLevelName.SmallBodyText,
+            ],
+            expect: 'black',
+        },
+        {
+            it: 'finds a color at the desired contrast level with background array',
+            inputs: [
+                {
+                    foreground: 'black',
+                    background: [
+                        'white',
+                        'gray',
+                        'black',
+                    ],
+                },
+                ContrastLevelName.SmallBodyText,
+            ],
+            expect: 'white',
+        },
+        {
+            it: 'returns undefined when no color matches the desired contrast level',
+            inputs: [
+                {
+                    foreground: [
+                        'white',
+                        '#fefefe',
+                    ],
+                    background: 'white',
+                },
+                ContrastLevelName.SmallBodyText,
+            ],
+            expect: undefined,
+        },
+        {
+            it: 'throws an error when no color array is provided',
+            inputs: [
+                {
+                    foreground: 'black',
+                    background: 'white',
+                } as any,
+                ContrastLevelName.SmallBodyText,
+            ],
+            throws: {
+                matchConstructor: Error,
+            },
+        },
+        {
+            it: 'finds color at lower contrast level',
+            inputs: [
+                {
+                    foreground: [
+                        'black',
+                        '#555555',
+                        '#999999',
+                    ],
+                    background: 'white',
+                },
+                ContrastLevelName.Header,
+            ],
+            expect: '#999999',
         },
     ]);
 });

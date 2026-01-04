@@ -1,3 +1,5 @@
+/* node:coverage disable */
+
 import {assertWrap, check} from '@augment-vir/assert';
 import {css, defineElement, html, listen, nothing, onDomCreated, unsafeCSS} from 'element-vir';
 import {type SingleCssVarDefinition} from 'lit-css-vars';

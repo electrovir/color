@@ -1,5 +1,5 @@
 import {assert, assertWrap, check} from '@augment-vir/assert';
-import {awaitedForEach, copyThroughJson} from '@augment-vir/common';
+import {awaitedForEach, copyThroughJson, stringify} from '@augment-vir/common';
 import {assertSnapshot, describe, it} from '@augment-vir/test';
 import {type ColorFormatName, colorFormatNames} from './color-formats.js';
 import {Color, type ColorUpdate} from './color.js';
@@ -152,7 +152,10 @@ describe(Color.name, () => {
                 formatsUsed.add(assertWrap.isDefined(Object.keys(setValue)[0]));
             }
             color.set(setValue);
-            await assertSnapshot(testContext, color.allColors);
+            await assertSnapshot(testContext, {
+                original: check.isString(setValue) ? setValue : stringify(setValue),
+                ...color.allColors,
+            });
         }
         const expectedKeys = Object.keys(color.allColors)
             .map((entry) => {

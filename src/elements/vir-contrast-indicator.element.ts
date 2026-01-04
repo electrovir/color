@@ -1,3 +1,5 @@
+/* node:coverage disable */
+
 import {classMap, css, defineElement, html, unsafeCSS} from 'element-vir';
 import {
     contrastLevelLabel,
