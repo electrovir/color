@@ -27,7 +27,7 @@ export const VirDemo = defineElement()({
                 pages: allBookPages,
                 internalRouterConfig: {
                     useInternalRouter: true,
-                    basePath: 'color/book',
+                    basePath: 'color',
                 },
             })}></${ElementBookApp}>
         `;
