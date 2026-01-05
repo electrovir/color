@@ -37,7 +37,8 @@ export default {
             "l": 0.389,
             "c": 0.069,
             "h": 326.8
-        }
+        },
+        "originalColorSyntax": "hex"
     },
     "Color > accurately serializes 2": {
         "names": [],
@@ -77,7 +78,8 @@ export default {
             "l": 0.389,
             "c": 0.069,
             "h": 326.8
-        }
+        },
+        "originalColorSyntax": "hex"
     },
     "Color > can update from any color format 1": {
         "original": "{hwb:{h:0,w:10,b:0}}",

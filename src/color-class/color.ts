@@ -18,6 +18,7 @@ import {
     ColorFormatName,
     colorFormats,
     ColorSyntaxName,
+    getColorSyntaxFromCssString,
     type ColorCoordinateDefinition,
     type ColorCoordinateName,
     type ColorCoordsByFormat,
@@ -55,6 +56,15 @@ export type AllColorsValues = ColorValue & {
 };
 
 /**
+ * The output of `Color.serialize()`.
+ *
+ * @category Internal
+ */
+export type SerializedColor = AllColorsValues & {
+    originalColorSyntax: ColorSyntaxName;
+};
+
+/**
  * A `Color` class with state and the following features:
  *
  * - Color coordinates do not change when they become `'none'`, they stay at their previous value.
@@ -73,25 +83,48 @@ export class Color {
         this.set(initValue);
     }
 
+    /** Checks, with a type guard, that a given input is a Color class instance. */
+    public static isColor<T>(value: T): value is Extract<T, Readonly<Color>> {
+        return value instanceof Color;
+    }
+
     /**
      * Create a new {@link Color} instance by parsing the output of another instance's
      * {@link Color.serialize} method.
      */
     public static deserialize(input: string) {
-        const parsed = JSON.parse(input) as AllColorsValues;
+        const parsed = JSON.parse(input) as SerializedColor;
         const newColor = new Color('black');
         getObjectTypedEntries(parsed).forEach(
             ([
                 key,
                 value,
             ]) => {
-                newColor._allColors[key] = value as any;
+                if (key === 'originalColorSyntax') {
+                    newColor.originalColorSyntax = assertWrap.isEnumValue(
+                        value,
+                        ColorSyntaxName,
+                        'Cannot deserialize: invalid color syntax.',
+                    );
+                } else {
+                    newColor._allColors[key] = value as any;
+                }
             },
         );
 
         return newColor;
     }
 
+    /**
+     * Converts the color class to a CSS string format in the color space and format that it was
+     * originally set with.
+     */
+    public toString() {
+        return this.toCss()[this.originalColorSyntax];
+    }
+
+    /** The color syntax the this color was set with. */
+    protected originalColorSyntax: ColorSyntaxName = ColorSyntaxName.hex;
     #internalColor: CuloriColor = assertWrap.isDefined(parse('black'));
     /** All current color values. These are updated whenever {@link Color.set} is called. */
     protected readonly _allColors = {
@@ -158,6 +191,7 @@ export class Color {
         if (!newColor) {
             throw new Error(`Unable to parse invalid color string: '${cssColorString}'`);
         }
+        this.originalColorSyntax = getColorSyntaxFromCssString(cssColorString);
 
         this.#internalColor = newColor;
         this.pullFromInternalColor();
@@ -272,7 +306,10 @@ export class Color {
      * match the current {@link Color} instance.
      */
     public serialize() {
-        return JSON.stringify(this.allColors);
+        return JSON.stringify({
+            ...this.allColors,
+            originalColorSyntax: this.originalColorSyntax,
+        } satisfies SerializedColor);
     }
 
     /** This individual color expressed in all the supported color formats. */

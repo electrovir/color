@@ -11,6 +11,12 @@ export default defineConfig(
         return mergeDeep(baseConfig, {
             build: {
                 outDir: join(basePaths.cwd, 'dist-pages'),
+                rollupOptions: {
+                    input: {
+                        main: join(basePaths.cwd, 'src', 'index.html'),
+                        book: join(basePaths.cwd, 'src', 'book', 'index.html'),
+                    },
+                },
             },
         });
     },

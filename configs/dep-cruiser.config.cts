@@ -9,6 +9,11 @@ const baseConfig = defineConfig({
                 'src/index\\.ts$',
             ],
         },
+        'not-to-mock': {
+            from: [
+                '\\.book\\.',
+            ],
+        },
     },
     omitRules: [
         // enter rule names here to omit

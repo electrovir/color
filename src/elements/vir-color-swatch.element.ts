@@ -2,6 +2,7 @@
 
 import {css, defineElement, html, unsafeCSS} from 'element-vir';
 import {type RequireAtLeastOne} from 'type-fest';
+import {type Color} from '../color-class/color.js';
 
 /**
  * Show a background and/or foreground color. Note that if a foreground color is provided that it is
@@ -11,8 +12,8 @@ import {type RequireAtLeastOne} from 'type-fest';
  */
 export const VirColorSwatch = defineElement<
     RequireAtLeastOne<{
-        foregroundColor: string;
-        backgroundColor: string;
+        foregroundColor: string | Readonly<Color>;
+        backgroundColor: string | Readonly<Color>;
     }>
 >()({
     tagName: 'vir-color-swatch',

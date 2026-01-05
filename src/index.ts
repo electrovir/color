@@ -8,6 +8,7 @@ export * from './elements/vir-color-details.element.js';
 export * from './elements/vir-color-format-sliders.element.js';
 export * from './elements/vir-color-pair-contrast-summary.element.js';
 export * from './elements/vir-color-pair.element.js';
+export * from './elements/vir-color-picker.element.js';
 export * from './elements/vir-color-slider.element.js';
 export * from './elements/vir-color-swatch.element.js';
 export * from './elements/vir-contrast-indicator.element.js';

@@ -8,7 +8,7 @@ import {
 } from '@augment-vir/common';
 import {assertSnapshot, describe, it} from '@augment-vir/test';
 import {ColorFormatName, ColorSyntaxName} from './color-formats.js';
-import {Color, type ColorUpdate} from './color.js';
+import {Color, type ColorUpdate, type SerializedColor} from './color.js';
 import {allExamples, namedExamples} from './color.mock.js';
 
 describe(Color.name, () => {
@@ -20,6 +20,23 @@ describe(Color.name, () => {
         getEnumValues(ColorFormatName).forEach((colorFormatName) => {
             assert.isObject(instance[colorFormatName]);
         });
+    });
+    it('preserves original type in isColor', () => {
+        const value = {} as any as Readonly<Color> | string | undefined;
+        const value2 = {} as any as Color | string | undefined;
+
+        if (Color.isColor(value)) {
+            assert.tsType(value).equals<Readonly<Color>>();
+            assert.tsType(value).notEquals<Color>();
+        }
+        if (Color.isColor(value2)) {
+            assert.tsType(value2).notEquals<Readonly<Color>>();
+            assert.tsType(value2).equals<Color>();
+        }
+    });
+    it('converts itself to a valid CSS string', () => {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        assert.strictEquals(`${new Color('rgb(256, 40, 100)')}`, 'rgb(255 40 100)');
     });
     it('sets initial values', async (testContext) => {
         await assertSnapshot(testContext, new Color('red').allColors);
@@ -75,7 +92,8 @@ describe(Color.name, () => {
             [ColorSyntaxName.oklch]: originalColor.oklch,
             [ColorSyntaxName.name]: originalColor.name,
             names: originalColor.names,
-        });
+            originalColorSyntax: ColorSyntaxName.hex,
+        } satisfies SerializedColor);
         await assertSnapshot(testContext, JSON.parse(originalColor.serialize()));
         await assertSnapshot(testContext, originalColor.serialize());
     });
