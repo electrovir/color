@@ -2,7 +2,7 @@
 
 A color package that wraps [the `culori` package](https://www.npmjs.com/package/culori) with an _extremely_ simple API for color string parsing and color space/model conversion. It is primarily built for https://electrovir.github.io/color-picker-app.
 
--   Conversion examples: https://electrovir.github.io/color/examples/conversions/all-color-formats
+-   Conversion examples: https://electrovir.github.io/color/book/examples/conversions/all-color-formats
 -   Reference docs: https://electrovir.github.io/color/docs
 
 ## Install
