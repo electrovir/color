@@ -1686,7 +1686,7 @@ ${qd(r,1)}`);super(i),this.errors=t,this.failureMessage=n}}function PM(e){return
                             ></${$n}>
                         </${rg}>
                     </div>
-                `}})}}),ZI=[ww,$w,VI,GI];gi()({tagName:"vir-color-demo",styles:W`
+                `}})}}),ZI=[ww,$w,VI,GI];gi()({tagName:"vir-demo",styles:W`
         :host {
             display: flex;
             flex-direction: column;
@@ -1701,5 +1701,5 @@ ${qd(r,1)}`);super(i),this.errors=t,this.failureMessage=n}}function PM(e){return
             box-sizing: border-box;
         }
     `,render(){return N`
-            <${Zl.assign({pages:ZI})}></${Zl}>
+            <${Zl.assign({pages:ZI,internalRouterConfig:{useInternalRouter:!0,basePath:"color/book"}})}></${Zl}>
         `}});
