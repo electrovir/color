@@ -3,6 +3,7 @@ export * from './color-class/color-name-length.js';
 export * from './color-class/color.js';
 export * from './contrast/contrast.js';
 export * from './elements/vir-all-color-space-sliders.element.js';
+export * from './elements/vir-all-spaces-color-picker.element.js';
 export * from './elements/vir-color-details.element.js';
 export * from './elements/vir-color-format-sliders.element.js';
 export * from './elements/vir-color-pair-contrast-summary.element.js';
