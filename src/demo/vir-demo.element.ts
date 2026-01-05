@@ -4,8 +4,8 @@ import {ElementBookApp} from 'element-book';
 import {css, defineElement, html} from 'element-vir';
 import {allBookPages} from './all-book-pages.js';
 
-export const VirColorDemo = defineElement()({
-    tagName: 'vir-color-demo',
+export const VirDemo = defineElement()({
+    tagName: 'vir-demo',
     styles: css`
         :host {
             display: flex;
@@ -25,6 +25,10 @@ export const VirColorDemo = defineElement()({
         return html`
             <${ElementBookApp.assign({
                 pages: allBookPages,
+                internalRouterConfig: {
+                    useInternalRouter: true,
+                    basePath: 'color/book',
+                },
             })}></${ElementBookApp}>
         `;
     },
