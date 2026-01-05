@@ -1,7 +1,8 @@
 /* node:coverage disable */
 
-import {ElementBookApp} from 'element-book';
+import {ElementBookApp, ElementBookSlotName} from 'element-book';
 import {css, defineElement, html} from 'element-vir';
+import {noNativeSpacing} from 'vira';
 import {allBookPages} from './all-book-pages.js';
 
 export const VirDemo = defineElement()({
@@ -20,6 +21,13 @@ export const VirDemo = defineElement()({
             max-width: 100%;
             box-sizing: border-box;
         }
+
+        h1 {
+            ${noNativeSpacing};
+            font-size: 16px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
     `,
     render() {
         return html`
@@ -29,7 +37,9 @@ export const VirDemo = defineElement()({
                     useInternalRouter: true,
                     basePath: 'color',
                 },
-            })}></${ElementBookApp}>
+            })}>
+                <h1 slot=${ElementBookSlotName.NavHeader}>@electrovir/color</h1>
+            </${ElementBookApp}>
         `;
     },
 });
