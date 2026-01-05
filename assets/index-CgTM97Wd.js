@@ -1701,5 +1701,5 @@ ${qd(r,1)}`);super(i),this.errors=t,this.failureMessage=n}}function PM(e){return
             box-sizing: border-box;
         }
     `,render(){return N`
-            <${Zl.assign({pages:ZI,internalRouterConfig:{useInternalRouter:!0,basePath:"color/book"}})}></${Zl}>
+            <${Zl.assign({pages:ZI,internalRouterConfig:{useInternalRouter:!0,basePath:"color"}})}></${Zl}>
         `}});
