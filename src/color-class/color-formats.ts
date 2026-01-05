@@ -205,6 +205,20 @@ export const ColorFormatName = mapObjectValues(
 ) satisfies Record<ColorFormatName, ColorFormatName> as AnyObject as {
     [Key in ColorFormatName]: Key;
 };
+
+/**
+ * {@link ColorFormatName} combined with hex and named CSS color representation.
+ *
+ * @category Internal
+ * @enum
+ */
+export const ColorSyntaxName = {
+    ...ColorFormatName,
+    hex: 'hex',
+    name: 'name',
+} as const;
+export type ColorSyntaxName = Values<typeof ColorSyntaxName>;
+
 /**
  * All supported color format names.
  *
@@ -315,6 +329,33 @@ export const colorFormatsBySpace = getObjectTypedEntries(colorFormats).reduce(
         [ColorFormat in ColorFormatName]: ColorFormatDefinition<ColorSpace, ColorFormat>;
     };
 };
+
+/**
+ * Determines the color syntax / format in use based on the given CSS color string.
+ *
+ * @category Util
+ */
+export function getColorSyntaxFromCssString(cssString: string): ColorSyntaxName {
+    if (cssString.startsWith('rgb')) {
+        return ColorSyntaxName.rgb;
+    } else if (cssString.startsWith('hsl')) {
+        return ColorSyntaxName.hsl;
+    } else if (cssString.startsWith('hwb')) {
+        return ColorSyntaxName.hwb;
+    } else if (cssString.startsWith('oklab')) {
+        return ColorSyntaxName.oklab;
+    } else if (cssString.startsWith('oklch')) {
+        return ColorSyntaxName.oklch;
+    } else if (cssString.startsWith('lab')) {
+        return ColorSyntaxName.lab;
+    } else if (cssString.startsWith('lch')) {
+        return ColorSyntaxName.lch;
+    } else if (cssString.startsWith('#')) {
+        return ColorSyntaxName.hex;
+    } else {
+        return ColorSyntaxName.name;
+    }
+}
 
 /**
  * All possible coordinate names for all supported color formats in a union.

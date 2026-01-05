@@ -17,6 +17,7 @@ import {type RequireExactlyOne} from 'type-fest';
 import {
     ColorFormatName,
     colorFormats,
+    ColorSyntaxName,
     type ColorCoordinateDefinition,
     type ColorCoordinateName,
     type ColorCoordsByFormat,
@@ -36,8 +37,8 @@ export type ColorUpdate = RequireExactlyOne<
             Record<ColorCoordsByFormat[FormatName], number>
         >;
     } & {
-        hex: HexColor;
-        name: string;
+        [ColorSyntaxName.hex]: HexColor;
+        [ColorSyntaxName.name]: string;
     }
 >;
 
@@ -47,7 +48,11 @@ export type ColorUpdate = RequireExactlyOne<
  *
  * @category Internal
  */
-export type AllColorsValues = ColorValue & {hex: HexColor; names: string[]};
+export type AllColorsValues = ColorValue & {
+    [ColorSyntaxName.hex]: HexColor;
+    [ColorSyntaxName.name]: string;
+    names: string[];
+};
 
 /**
  * A `Color` class with state and the following features:
@@ -91,45 +96,46 @@ export class Color {
     /** All current color values. These are updated whenever {@link Color.set} is called. */
     protected readonly _allColors = {
         names: ['black'] as string[],
-        hex: '#000000' as HexColor,
+        [ColorSyntaxName.name]: 'black' as string,
+        [ColorSyntaxName.hex]: '#000000' as HexColor,
 
-        rgb: {
+        [ColorSyntaxName.rgb]: {
             r: 0 as number,
             g: 0 as number,
             b: 0 as number,
         },
 
-        hsl: {
+        [ColorSyntaxName.hsl]: {
             h: 0 as number,
             s: 0 as number,
             l: 0 as number,
         },
 
-        hwb: {
+        [ColorSyntaxName.hwb]: {
             h: 0 as number,
             w: 0 as number,
             b: 0 as number,
         },
 
-        lab: {
+        [ColorSyntaxName.lab]: {
             l: 0 as number,
             a: 0 as number,
             b: 0 as number,
         },
 
-        lch: {
+        [ColorSyntaxName.lch]: {
             l: 0 as number,
             c: 0 as number,
             h: 0 as number,
         },
 
-        oklab: {
+        [ColorSyntaxName.oklab]: {
             l: 0 as number,
             a: 0 as number,
             b: 0 as number,
         },
 
-        oklch: {
+        [ColorSyntaxName.oklch]: {
             l: 0 as number,
             c: 0 as number,
             h: 0 as number,
@@ -256,8 +262,9 @@ export class Color {
             });
         });
 
-        this._allColors.hex = formatHex(this.#internalColor) as HexColor;
+        this._allColors[ColorSyntaxName.hex] = formatHex(this.#internalColor) as HexColor;
         this._allColors.names = findMatchingColorNames(this.rgb);
+        this._allColors[ColorSyntaxName.name] = this._allColors.names[0] || '';
     }
 
     /**
@@ -276,32 +283,37 @@ export class Color {
     /**
      * Converts the values for each supported color format into a padded string for easy display
      * purposes.
+     *
+     * @see `.toCss()`
      */
-    public toFormattedStrings(): Record<ColorFormatName | 'hex' | 'names', string> {
+    public toFormattedStrings(): Record<ColorSyntaxName | 'names', string> {
         const colorFormatStrings = mapObjectValues(colorFormats, (colorFormatName) => {
             const coordValues = Object.values(this[colorFormatName]);
             return coordValues.map((coordValue) => String(coordValue).padStart(6, ' ')).join(' ');
         });
 
         return {
-            hex: this.hex,
+            [ColorSyntaxName.hex]: this.hex,
             ...colorFormatStrings,
             names: this.names.join(', ').padEnd(maxColorNameLength, ' '),
+            name: (this.names[0] || '').padEnd(maxColorNameLength, ' '),
         };
     }
 
     /**
      * Converts the values for each supported color format in a CSS string that can be directly used
      * in any modern CSS code.
+     *
+     * @see `.toFormattedStrings()`
      */
-    public toCss(): Record<ColorFormatName | 'hex' | 'name', string> {
+    public toCss(): Record<ColorSyntaxName, string> {
         const colorFormatStrings = mapObjectValues(colorFormats, (colorFormatName) => {
             const coordValues = Object.values(this[colorFormatName]);
             return `${colorFormatName}(${coordValues.join(' ')})`;
         });
 
         return {
-            hex: this.hex,
+            [ColorSyntaxName.hex]: this.hex,
             ...colorFormatStrings,
             name: this.names[0] || '',
         };
@@ -314,41 +326,48 @@ export class Color {
     public get names() {
         return copyThroughJson(this._allColors.names);
     }
+    /**
+     * The current color expressed as a single CSS color name string. If there is no color name that
+     * matches the current color, this will be an empty string.
+     */
+    public get name() {
+        return this._allColors.names[0] || '';
+    }
     /** The current color expressed as an RGB hex string. */
     public get hex() {
-        return copyThroughJson(this._allColors.hex) as HexColor;
+        return copyThroughJson(this._allColors[ColorSyntaxName.hex]) as HexColor;
     }
     /** The current color expressed as its RGB coordinate values. */
     public get rgb() {
-        return copyThroughJson(this._allColors.rgb);
+        return copyThroughJson(this._allColors[ColorSyntaxName.rgb]);
     }
     /** The current color expressed as its HSL coordinate values. */
     public get hsl() {
-        return copyThroughJson(this._allColors.hsl);
+        return copyThroughJson(this._allColors[ColorSyntaxName.hsl]);
     }
     /** The current color expressed as its HWB coordinate values. */
     public get hwb() {
-        return copyThroughJson(this._allColors.hwb);
+        return copyThroughJson(this._allColors[ColorSyntaxName.hwb]);
     }
     /** The current color expressed as its LAB coordinate values. */
     public get lab() {
-        return copyThroughJson(this._allColors.lab);
+        return copyThroughJson(this._allColors[ColorSyntaxName.lab]);
     }
     /** The current color expressed as its LCH coordinate values. */
     public get lch() {
-        return copyThroughJson(this._allColors.lch);
+        return copyThroughJson(this._allColors[ColorSyntaxName.lch]);
     }
     /** The current color expressed as its Oklab coordinate values. */
     public get oklab() {
-        return copyThroughJson(this._allColors.oklab);
+        return copyThroughJson(this._allColors[ColorSyntaxName.oklab]);
     }
     /** The current color expressed as its Oklch coordinate values. */
     public get oklch() {
-        return copyThroughJson(this._allColors.oklch);
+        return copyThroughJson(this._allColors[ColorSyntaxName.oklch]);
     }
 }
 
-function findMatchingColorNames(rgb: Readonly<ColorValue['rgb']>): string[] {
+function findMatchingColorNames(rgb: Readonly<ColorValue[typeof ColorSyntaxName.rgb]>): string[] {
     return filterMap(
         getObjectTypedEntries(colorNames),
         ([

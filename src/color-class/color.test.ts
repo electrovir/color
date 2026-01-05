@@ -1,7 +1,13 @@
 import {assert, assertWrap, check} from '@augment-vir/assert';
-import {awaitedForEach, copyThroughJson, getEnumValues, stringify} from '@augment-vir/common';
+import {
+    awaitedForEach,
+    copyThroughJson,
+    getEnumValues,
+    omitObjectKeys,
+    stringify,
+} from '@augment-vir/common';
 import {assertSnapshot, describe, it} from '@augment-vir/test';
-import {ColorFormatName} from './color-formats.js';
+import {ColorFormatName, ColorSyntaxName} from './color-formats.js';
 import {Color, type ColorUpdate} from './color.js';
 import {allExamples, namedExamples} from './color.mock.js';
 
@@ -59,14 +65,15 @@ describe(Color.name, () => {
     it('accurately serializes', async (testContext) => {
         const originalColor = new Color('#583758');
         assert.deepEquals(JSON.parse(originalColor.serialize()), {
-            hex: originalColor.hex,
-            rgb: originalColor.rgb,
-            hsl: originalColor.hsl,
-            hwb: originalColor.hwb,
-            lab: originalColor.lab,
-            lch: originalColor.lch,
-            oklab: originalColor.oklab,
-            oklch: originalColor.oklch,
+            [ColorSyntaxName.hex]: originalColor.hex,
+            [ColorSyntaxName.rgb]: originalColor.rgb,
+            [ColorSyntaxName.hsl]: originalColor.hsl,
+            [ColorSyntaxName.hwb]: originalColor.hwb,
+            [ColorSyntaxName.lab]: originalColor.lab,
+            [ColorSyntaxName.lch]: originalColor.lch,
+            [ColorSyntaxName.oklab]: originalColor.oklab,
+            [ColorSyntaxName.oklch]: originalColor.oklch,
+            [ColorSyntaxName.name]: originalColor.name,
             names: originalColor.names,
         });
         await assertSnapshot(testContext, JSON.parse(originalColor.serialize()));
@@ -113,7 +120,7 @@ describe(Color.name, () => {
         const originalColors = color.allColors;
 
         color.set({
-            hex: '#123',
+            [ColorSyntaxName.hex]: '#123',
         });
 
         assert.notDeepEquals(originalColors, color.allColors);
@@ -157,20 +164,12 @@ describe(Color.name, () => {
                 ...color.allColors,
             });
         }
-        const expectedKeys = Object.keys(color.allColors)
-            .map((entry) => {
-                if (entry === 'names') {
-                    return 'name';
-                } else {
-                    return entry;
-                }
-            })
-            .sort();
 
         await awaitedForEach(allExamples, async (example) => {
             await updateColor(example);
         });
 
+        const expectedKeys = Object.keys(omitObjectKeys(color.allColors, ['names'])).sort();
         assert.hasValues(Array.from(formatsUsed), expectedKeys);
     });
 });

@@ -1,6 +1,7 @@
 export default {
     "Color > accurately serializes 1": {
         "names": [],
+        "name": "",
         "hex": "#583758",
         "rgb": {
             "r": 88,
@@ -40,6 +41,7 @@ export default {
     },
     "Color > accurately serializes 2": {
         "names": [],
+        "name": "",
         "hex": "#583758",
         "rgb": {
             "r": 88,
@@ -80,6 +82,7 @@ export default {
     "Color > can update from any color format 1": {
         "original": "{hwb:{h:0,w:10,b:0}}",
         "names": [],
+        "name": "",
         "hex": "#ff1919",
         "rgb": {
             "r": 255,
@@ -120,6 +123,7 @@ export default {
     "Color > can update from any color format 10": {
         "original": "{rgb:{r:42,g:180,b:210}}",
         "names": [],
+        "name": "",
         "hex": "#2ab4d2",
         "rgb": {
             "r": 42,
@@ -160,6 +164,7 @@ export default {
     "Color > can update from any color format 11": {
         "original": "{hsl:{h:200,s:80,l:60}}",
         "names": [],
+        "name": "",
         "hex": "#47b4eb",
         "rgb": {
             "r": 71,
@@ -200,6 +205,7 @@ export default {
     "Color > can update from any color format 12": {
         "original": "{hwb:{h:50,w:20,b:30}}",
         "names": [],
+        "name": "",
         "hex": "#b39d33",
         "rgb": {
             "r": 179,
@@ -240,6 +246,7 @@ export default {
     "Color > can update from any color format 13": {
         "original": "{lch:{l:80,c:150,h:120}}",
         "names": [],
+        "name": "",
         "hex": "#28e600",
         "rgb": {
             "r": 40,
@@ -280,6 +287,7 @@ export default {
     "Color > can update from any color format 14": {
         "original": "{oklab:{l:0.821,a:0.234,b:-0.119}}",
         "names": [],
+        "name": "",
         "hex": "#ff73ff",
         "rgb": {
             "r": 255,
@@ -320,6 +328,7 @@ export default {
     "Color > can update from any color format 15": {
         "original": "{oklch:{l:0.901,c:0.315,h:250.5}}",
         "names": [],
+        "name": "",
         "hex": "#00deff",
         "rgb": {
             "r": 0,
@@ -360,6 +369,7 @@ export default {
     "Color > can update from any color format 16": {
         "original": "oklab(0.421 0.165 -0.5)",
         "names": [],
+        "name": "",
         "hex": "#8000ff",
         "rgb": {
             "r": 128,
@@ -402,6 +412,7 @@ export default {
         "names": [
             "red"
         ],
+        "name": "red",
         "hex": "#ff0000",
         "rgb": {
             "r": 255,
@@ -442,6 +453,7 @@ export default {
     "Color > can update from any color format 3": {
         "original": "#583758",
         "names": [],
+        "name": "",
         "hex": "#583758",
         "rgb": {
             "r": 88,
@@ -482,6 +494,7 @@ export default {
     "Color > can update from any color format 4": {
         "original": "color(--hsv 200 0.75 0.90)",
         "names": [],
+        "name": "",
         "hex": "#39ace6",
         "rgb": {
             "r": 57,
@@ -522,6 +535,7 @@ export default {
     "Color > can update from any color format 5": {
         "original": "lch(80 150 12)",
         "names": [],
+        "name": "",
         "hex": "#ff0099",
         "rgb": {
             "r": 255,
@@ -562,6 +576,7 @@ export default {
     "Color > can update from any color format 6": {
         "original": "{lab:{l:100,a:0,b:127}}",
         "names": [],
+        "name": "",
         "hex": "#fffc00",
         "rgb": {
             "r": 255,
@@ -602,6 +617,7 @@ export default {
     "Color > can update from any color format 7": {
         "original": "lab(75 -20 95)",
         "names": [],
+        "name": "",
         "hex": "#b4c200",
         "rgb": {
             "r": 180,
@@ -642,6 +658,7 @@ export default {
     "Color > can update from any color format 8": {
         "original": "{hex:'#f81'}",
         "names": [],
+        "name": "",
         "hex": "#ff8811",
         "rgb": {
             "r": 255,
@@ -684,6 +701,7 @@ export default {
         "names": [
             "dodgerblue"
         ],
+        "name": "dodgerblue",
         "hex": "#1e90ff",
         "rgb": {
             "r": 30,
@@ -741,12 +759,14 @@ export default {
         "lch": "  55.1    101     39",
         "oklab": " 0.634  0.221   0.12",
         "oklch": " 0.634  0.251   28.5",
-        "names": "                    "
+        "names": "                    ",
+        "name": "                    "
     },
     "Color > sets initial values 1": {
         "names": [
             "red"
         ],
+        "name": "red",
         "hex": "#ff0000",
         "rgb": {
             "r": 255,
@@ -786,6 +806,7 @@ export default {
     },
     "Color > updates its values 1": {
         "names": [],
+        "name": "",
         "hex": "#ff1919",
         "rgb": {
             "r": 255,
