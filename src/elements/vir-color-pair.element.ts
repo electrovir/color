@@ -3,7 +3,7 @@
 import {assertWrap, check} from '@augment-vir/assert';
 import {css, defineElement, html, listen, nothing, onDomCreated, unsafeCSS} from 'element-vir';
 import {type SingleCssVarDefinition} from 'lit-css-vars';
-import {noNativeFormStyles, noNativeSpacing} from 'vira';
+import {noNativeFormStyles, noNativeSpacing, viraFontCssVars} from 'vira';
 import {calculateContrast, type FontWeight} from '../contrast/contrast.js';
 import {VirContrastIndicator} from './vir-contrast-indicator.element.js';
 
@@ -102,7 +102,7 @@ export const VirColorPair = defineElement<{
         }
 
         .css-var-names {
-            font-family: monospace;
+            font-family: ${viraFontCssVars['vira-monospace'].value};
             display: flex;
             max-width: 100%;
             flex-direction: column;

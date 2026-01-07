@@ -2,8 +2,8 @@
 
 import {defineBookPage} from 'element-book';
 import {css, defineElement, html, listen} from 'element-vir';
-import {VirColorPicker} from '../../elements/vir-color-picker.element.js';
-import {elementsBookPage} from '../top-level-pages.js';
+import {elementsBookPage} from '../demo/top-level-pages.js';
+import {VirColorPicker} from './vir-color-picker.element.js';
 
 const VirAnimatedSizeWrapper = defineElement()({
     tagName: 'vir-animated-size-wrapper',
@@ -114,6 +114,26 @@ export const virColorPickerBookPage = defineBookPage({
                             ></${VirColorPicker}>
                         </${VirAnimatedSizeWrapper}>
                     </div>
+                `;
+            },
+        });
+        defineExample({
+            title: 'always show',
+            state() {
+                return {
+                    currentColor: undefined as string | undefined,
+                };
+            },
+            render({state, updateState}) {
+                return html`
+                    <${VirColorPicker.assign({
+                        color: state.currentColor,
+                        alwaysShowPicker: true,
+                    })}
+                        ${listen(VirColorPicker.events.colorChange, (event) => {
+                            updateState({currentColor: event.detail});
+                        })}
+                    ></${VirColorPicker}>
                 `;
             },
         });
