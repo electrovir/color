@@ -1,9 +1,17 @@
 /* node:coverage disable */
 
-import {assertWrap} from '@augment-vir/assert';
+import {assert, assertWrap} from '@augment-vir/assert';
 import {createArray} from '@augment-vir/common';
 import {extractEventTarget} from '@augment-vir/web';
-import {css, defineElement, defineElementEvent, html, listen, unsafeCSS} from 'element-vir';
+import {
+    css,
+    defineElement,
+    defineElementEvent,
+    html,
+    listen,
+    onDomRendered,
+    unsafeCSS,
+} from 'element-vir';
 import {viraFontCssVars, ViraInput} from 'vira';
 import {
     type ColorCoordinateName,
@@ -108,10 +116,19 @@ export const VirColorSlider = defineElement<{
                 style=${css`
                     ${cssVars['vir-color-slider-gradient'].name}: ${gradient};
                 `}
-                min=${coordinateDefinition.min}
-                max=${coordinateDefinition.max}
-                .value=${String(coordinateValue)}
                 step=${Math.pow(10, coordinateDefinition.digits ? -coordinateDefinition.digits : 0)}
+                ${onDomRendered((element) => {
+                    /**
+                     * We must set these imperatively to force the input element to match the
+                     * inputs, otherwise when swapping color formats these color sliders don't
+                     * update correctly.
+                     */
+                    assert.instanceOf(element, HTMLInputElement);
+
+                    element.min = String(coordinateDefinition.min);
+                    element.max = String(coordinateDefinition.max);
+                    element.value = String(coordinateValue);
+                })}
                 ${listen('input', (event) => {
                     const element = extractEventTarget(event, HTMLInputElement);
                     const newValue = Number(element.value);
