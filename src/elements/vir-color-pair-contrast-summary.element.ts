@@ -4,14 +4,14 @@ import {assertWrap} from '@augment-vir/assert';
 import {getObjectTypedEntries, round} from '@augment-vir/common';
 import {classMap, css, defineElement, html, unsafeCSS} from 'element-vir';
 import {defineTable, noNativeSpacing, ViraBoldText, viraFontCssVars} from 'vira';
-import {Color} from '../color-class/color.js';
+import {Color} from '../data/color-class/color.js';
 import {
     calculateContrast,
     calculateFontSizes,
     contrastLevelLabel,
     contrastLevels,
     fontWeightByName,
-} from '../contrast/contrast.js';
+} from '../data/contrast/contrast.js';
 import {VirColorSwatch} from './vir-color-swatch.element.js';
 import {VirContrastIndicator} from './vir-contrast-indicator.element.js';
 

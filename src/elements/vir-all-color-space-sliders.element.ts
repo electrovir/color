@@ -2,8 +2,8 @@
 
 import {getObjectTypedKeys, getObjectTypedValues} from '@augment-vir/common';
 import {css, defineElement, defineElementEvent, html, listen} from 'element-vir';
-import {colorFormatsBySpace} from '../color-class/color-formats.js';
-import {type Color} from '../color-class/color.js';
+import {colorFormatsBySpace} from '../data/color-class/color-formats.js';
+import {type Color} from '../data/color-class/color.js';
 import {VirColorFormatSliders} from './vir-color-format-sliders.element.js';
 
 /**

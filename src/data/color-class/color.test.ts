@@ -41,6 +41,18 @@ describe(Color.name, () => {
     it('sets initial values', async (testContext) => {
         await assertSnapshot(testContext, new Color('red').allColors);
     });
+    it('works with setting hex coords', async (testContext) => {
+        await assertSnapshot(
+            testContext,
+            new Color({
+                hex: {
+                    r: 100,
+                    g: 100,
+                    b: 100,
+                },
+            }).allColors,
+        );
+    });
     it('formats as CSS', async (testContext) => {
         await assertSnapshot(testContext, new Color(namedExamples.hwbSet).toCss());
     });
@@ -91,6 +103,7 @@ describe(Color.name, () => {
             [ColorSyntaxName.oklab]: originalColor.oklab,
             [ColorSyntaxName.oklch]: originalColor.oklch,
             [ColorSyntaxName.name]: originalColor.name,
+            [ColorSyntaxName.hexString]: originalColor.hexString,
             names: originalColor.names,
             originalColorSyntax: ColorSyntaxName.hex,
         } satisfies SerializedColor);
@@ -138,7 +151,7 @@ describe(Color.name, () => {
         const originalColors = color.allColors;
 
         color.set({
-            [ColorSyntaxName.hex]: '#123',
+            [ColorSyntaxName.hexString]: '#123',
         });
 
         assert.notDeepEquals(originalColors, color.allColors);

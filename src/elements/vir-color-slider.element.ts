@@ -10,8 +10,8 @@ import {
     type ColorFormatDefinition,
     type ColorFormatName,
     colorFormats,
-} from '../color-class/color-formats.js';
-import {Color, type ColorUpdate} from '../color-class/color.js';
+} from '../data/color-class/color-formats.js';
+import {Color, type ColorUpdate} from '../data/color-class/color.js';
 
 /**
  * A slider for a specific color coordinate in a specific color space in a specific color.
@@ -67,6 +67,7 @@ export const VirColorSlider = defineElement<{
         }
 
         const totalStops = 10;
+
         const colorStops: string[] = createArray(totalStops, (index) => {
             const value =
                 coordinateDefinition.min +
@@ -79,7 +80,7 @@ export const VirColorSlider = defineElement<{
                 },
             } as ColorUpdate);
 
-            return stopColor.toCss()[inputs.colorFormatName];
+            return stopColor.toCss()[formatDefinition.conversionFormat];
         });
 
         const gradient = css`linear-gradient(to right, ${unsafeCSS(colorStops.join(','))})`;
@@ -92,6 +93,13 @@ export const VirColorSlider = defineElement<{
                 >
             )[inputs.colorCoordinateName],
         );
+
+        const displayValue = coordinateDefinition.radix
+            ? Math.round(coordinateValue)
+                  .toString(coordinateDefinition.radix)
+                  .toUpperCase()
+                  .padStart(coordinateDefinition.radixPad || 0, '0')
+            : String(coordinateValue);
 
         return html`
             <span class="coordinate">${inputs.colorCoordinateName.toUpperCase()}</span>
@@ -115,10 +123,12 @@ export const VirColorSlider = defineElement<{
                 })}
             />
             <${ViraInput.assign({
-                value: String(coordinateValue),
+                value: displayValue,
             })}
                 ${listen(ViraInput.events.valueChange, (event) => {
-                    const newValue = Number(event.detail);
+                    const newValue = coordinateDefinition.radix
+                        ? parseInt(event.detail, coordinateDefinition.radix)
+                        : Number(event.detail);
                     if (isNaN(newValue)) {
                         return;
                     }

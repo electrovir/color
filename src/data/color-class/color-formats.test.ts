@@ -17,6 +17,7 @@ describe('ColorValues', () => {
     it('has all color coordinates', () => {
         assert.tsType<ColorValue>().equals<{
             rgb: Record<'r' | 'g' | 'b', number>;
+            hex: Record<'r' | 'g' | 'b', number>;
             hsl: Record<'h' | 's' | 'l', number>;
             hwb: Record<'b' | 'h' | 'w', number>;
             lab: Record<'b' | 'l' | 'a', number>;

@@ -2,7 +2,7 @@
 
 import {css, defineElement, html, unsafeCSS} from 'element-vir';
 import {type RequireAtLeastOne} from 'type-fest';
-import {type Color} from '../color-class/color.js';
+import {type Color} from '../data/color-class/color.js';
 
 /**
  * Show a background and/or foreground color. Note that if a foreground color is provided that it is

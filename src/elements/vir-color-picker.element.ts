@@ -17,9 +17,10 @@ import {
 } from 'vira';
 import {
     ColorFormatName,
+    colorFormats,
     type ColorFormatName as ColorFormatNameType,
-} from '../color-class/color-formats.js';
-import {Color} from '../color-class/color.js';
+} from '../data/color-class/color-formats.js';
+import {Color} from '../data/color-class/color.js';
 import {VirColorFormatSliders} from './vir-color-format-sliders.element.js';
 import {VirColorSwatch} from './vir-color-swatch.element.js';
 
@@ -159,8 +160,9 @@ export const VirColorPicker = defineElement<
         const color: Readonly<Color> = Color.isColor(inputs.color)
             ? inputs.color
             : new Color(inputs.color || 'black');
+        const formatDefinition = colorFormats[state.selectedFormatName];
 
-        const rawInput = state.rawInput ?? color.toCss()[state.selectedFormatName];
+        const rawInput = state.rawInput ?? color.toCss()[formatDefinition.rawSyntax];
 
         const rawInputTemplate = html`
             <div class="raw-input-wrapper">
@@ -194,10 +196,10 @@ export const VirColorPicker = defineElement<
             <button
                 class="code-button"
                 ${listen('click', async () => {
-                    await globalThis.navigator.clipboard.writeText(color.hex);
+                    await globalThis.navigator.clipboard.writeText(color.hexString);
                 })}
             >
-                <span>${color.hex}</span>
+                <span>${color.hexString}</span>
                 <${ViraIcon.assign({
                     icon: Copy24Icon,
                     fitContainer: true,
@@ -261,8 +263,6 @@ export const VirColorPicker = defineElement<
         }
     },
 });
-
-console.log(String(VirColorPicker.cssVars['vir-color-picker-swatch-width'].name));
 
 CSS.registerProperty({
     name: String(VirColorPicker.cssVars['vir-color-picker-swatch-width'].name),

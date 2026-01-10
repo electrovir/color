@@ -1,3 +1,4 @@
+import {assert, assertWrap, check} from '@augment-vir/assert';
 import {
     type AnyObject,
     arrayToObject,
@@ -6,6 +7,7 @@ import {
     getOrSet,
     mapObjectValues,
     type PartialWithUndefined,
+    stringify,
     type UnionToIntersection,
     type Values,
 } from '@augment-vir/common';
@@ -38,8 +40,55 @@ export type ColorCoordinateDefinition = {
      * @default 1
      */
     factor?: number | undefined;
-    suffix?: string;
+    suffix?: string | undefined;
+    radix?: number | undefined;
+    radixPad?: number | undefined;
 }>;
+
+/**
+ * Color formats supported by culori conversions.
+ *
+ * @category Internal
+ */
+export enum CuloriConversionFormat {
+    a98 = 'a98',
+    cubehelix = 'cubehelix',
+    dlab = 'dlab',
+    dlch = 'dlch',
+    hsi = 'hsi',
+    hsl = 'hsl',
+    hsv = 'hsv',
+    hwb = 'hwb',
+    itp = 'itp',
+    jab = 'jab',
+    jch = 'jch',
+    lab = 'lab',
+    lab65 = 'lab65',
+    lch = 'lch',
+    lch65 = 'lch65',
+    lchuv = 'lchuv',
+    lrgb = 'lrgb',
+    luv = 'luv',
+    okhsl = 'okhsl',
+    okhsv = 'okhsv',
+    oklab = 'oklab',
+    oklch = 'oklch',
+    p3 = 'p3',
+    prophoto = 'prophoto',
+    rec2020 = 'rec2020',
+    rgb = 'rgb',
+    xyb = 'xyb',
+    xyz50 = 'xyz50',
+    xyz65 = 'xyz65',
+    yiq = 'yiq',
+}
+
+/**
+ * The subset of {@link ColorFormatName} that supports color conversion (via culori).
+ *
+ * @category Internal
+ */
+export type SupportedConversionFormat = Extract<ColorFormatName, `${CuloriConversionFormat}`>;
 
 /**
  * All raw supported color formats.
@@ -65,6 +114,34 @@ export const rawColorFormats = {
                 factor: 255,
             },
         },
+        colorSpace: 'rgb',
+    },
+    hex: {
+        coords: {
+            r: {
+                min: 0,
+                max: 255,
+                factor: 255,
+                radix: 16,
+                radixPad: 2,
+            },
+            g: {
+                min: 0,
+                max: 255,
+                factor: 255,
+                radix: 16,
+                radixPad: 2,
+            },
+            b: {
+                min: 0,
+                max: 255,
+                factor: 255,
+                radix: 16,
+                radixPad: 2,
+            },
+        },
+        conversionFormat: CuloriConversionFormat.rgb,
+        rawSyntax: 'hexString',
         colorSpace: 'rgb',
     },
     hsl: {
@@ -190,6 +267,12 @@ export const rawColorFormats = {
     {
         coords: Record<string, ColorCoordinateDefinition>;
         colorSpace: string;
+        /**
+         * Only required if the original color format name (the object key) for the color isn't
+         * already in {@link CuloriConversionFormat}.
+         */
+        conversionFormat?: CuloriConversionFormat | undefined;
+        rawSyntax?: string | undefined;
     }
 >;
 
@@ -214,8 +297,8 @@ export const ColorFormatName = mapObjectValues(
  */
 export const ColorSyntaxName = {
     ...ColorFormatName,
-    hex: 'hex',
     name: 'name',
+    hexString: 'hexString',
 } as const;
 export type ColorSyntaxName = Values<typeof ColorSyntaxName>;
 
@@ -256,9 +339,34 @@ export type ColorFormats = Readonly<{
 export const colorFormats = mapObjectValues(
     rawColorFormats,
     (colorFormatName, colorFormatValue) => {
+        const conversionFormat: SupportedConversionFormat | undefined =
+            check.isEnumValue(colorFormatName, CuloriConversionFormat) &&
+            check.isEnumValue(colorFormatName, ColorFormatName)
+                ? colorFormatName
+                : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                  'conversionFormat' in colorFormatValue && colorFormatValue.conversionFormat
+                  ? check.isEnumValue(colorFormatValue.conversionFormat, CuloriConversionFormat) &&
+                    check.isEnumValue(colorFormatValue.conversionFormat, ColorFormatName)
+                      ? colorFormatValue.conversionFormat
+                      : undefined
+                  : undefined;
+
+        assert.isTruthy(
+            conversionFormat,
+            `Invalid conversion format for color format '${colorFormatName}' ${stringify(colorFormatValue)}.`,
+        );
+
         return {
             ...colorFormatValue,
             colorFormat: colorFormatName,
+            conversionFormat,
+            rawSyntax: assertWrap.isEnumValue(
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                'rawSyntax' in colorFormatValue && colorFormatValue.rawSyntax
+                    ? colorFormatValue.rawSyntax
+                    : colorFormatName,
+                ColorSyntaxName,
+            ),
         } satisfies ColorFormatDefinition;
     },
 ) satisfies Record<ColorFormatName, ColorFormatDefinition> as Record<
@@ -351,7 +459,7 @@ export function getColorSyntaxFromCssString(cssString: string): ColorSyntaxName 
     } else if (cssString.startsWith('lch')) {
         return ColorSyntaxName.lch;
     } else if (cssString.startsWith('#')) {
-        return ColorSyntaxName.hex;
+        return ColorSyntaxName.hexString;
     } else {
         return ColorSyntaxName.name;
     }
@@ -380,4 +488,6 @@ export type ColorFormatDefinition<
     /** This name for this color to be used in `Colorjs.to()`. Defaults to the color format key. */
     colorSpace: ColorSpace;
     colorFormat: ColorFormat;
+    conversionFormat: SupportedConversionFormat;
+    rawSyntax: ColorSyntaxName;
 };

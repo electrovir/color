@@ -7,8 +7,8 @@ import {
     type ColorCoordinateName,
     type ColorFormatName,
     colorFormats,
-} from '../color-class/color-formats.js';
-import {type Color, type ColorUpdate} from '../color-class/color.js';
+} from '../data/color-class/color-formats.js';
+import {type Color, type ColorUpdate} from '../data/color-class/color.js';
 import {VirColorSlider} from './vir-color-slider.element.js';
 
 /**
@@ -53,7 +53,7 @@ export const VirColorFormatSliders = defineElement<{
                                     [colorCoordinate]: event.detail,
                                 },
                             } as ColorUpdate);
-                            const newValue = newColor.toCss()[inputs.colorFormatName];
+                            const newValue = newColor.toCss()[colorFormat.conversionFormat];
                             dispatch(new events.colorChange(newValue));
                         })}
                     ></${VirColorSlider}>

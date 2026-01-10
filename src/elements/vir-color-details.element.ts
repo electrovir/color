@@ -3,7 +3,7 @@
 import {getObjectTypedEntries, omitObjectKeys} from '@augment-vir/common';
 import {css, defineElement, defineElementEvent, html, listen} from 'element-vir';
 import {defineTable, noNativeSpacing, viraFontCssVars, ViraInput} from 'vira';
-import {Color} from '../color-class/color.js';
+import {Color} from '../data/color-class/color.js';
 import {VirColorSwatch} from './vir-color-swatch.element.js';
 
 /**

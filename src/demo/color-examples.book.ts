@@ -3,8 +3,8 @@
 import {checkWrap} from '@augment-vir/assert';
 import {defineBookPage} from 'element-book';
 import {css, html, unsafeCSS} from 'element-vir';
-import {Color, type ColorUpdate} from '../color-class/color.js';
-import {allExamples} from '../color-class/color.mock.js';
+import {Color, type ColorUpdate} from '../data/color-class/color.js';
+import {allExamples} from '../data/color-class/color.mock.js';
 import {examplesBookPage} from './top-level-pages.js';
 
 function renderColorExample(example: string | ColorUpdate) {

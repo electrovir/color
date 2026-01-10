@@ -4,7 +4,7 @@ import {assertWrap, check} from '@augment-vir/assert';
 import {css, defineElement, html, listen, nothing, onDomCreated, unsafeCSS} from 'element-vir';
 import {type SingleCssVarDefinition} from 'lit-css-vars';
 import {noNativeFormStyles, noNativeSpacing, viraFontCssVars} from 'vira';
-import {calculateContrast, type FontWeight} from '../contrast/contrast.js';
+import {calculateContrast, type FontWeight} from '../data/contrast/contrast.js';
 import {VirContrastIndicator} from './vir-contrast-indicator.element.js';
 
 /**

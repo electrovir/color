@@ -7,7 +7,7 @@ import {
     contrastLevels,
     type CalculatedContrast,
     type FontWeight,
-} from '../contrast/contrast.js';
+} from '../data/contrast/contrast.js';
 
 /**
  * Show contrast details for a calculated contrast.

@@ -38,7 +38,7 @@ export type ColorUpdate = RequireExactlyOne<
             Record<ColorCoordsByFormat[FormatName], number>
         >;
     } & {
-        [ColorSyntaxName.hex]: HexColor;
+        [ColorSyntaxName.hexString]: HexColor;
         [ColorSyntaxName.name]: string;
     }
 >;
@@ -50,7 +50,7 @@ export type ColorUpdate = RequireExactlyOne<
  * @category Internal
  */
 export type AllColorsValues = ColorValue & {
-    [ColorSyntaxName.hex]: HexColor;
+    hexString: HexColor;
     [ColorSyntaxName.name]: string;
     names: string[];
 };
@@ -138,7 +138,13 @@ export class Color {
     protected readonly _allColors = {
         names: ['black'] as string[],
         [ColorSyntaxName.name]: 'black' as string,
-        [ColorSyntaxName.hex]: '#000000' as HexColor,
+        hexString: '#000000' as HexColor,
+
+        [ColorSyntaxName.hex]: {
+            r: 0 as number,
+            g: 0 as number,
+            b: 0 as number,
+        },
 
         [ColorSyntaxName.rgb]: {
             r: 0 as number,
@@ -221,8 +227,8 @@ export class Color {
             `Cannot set multiple color formats at once: got '${joinWithFinalConjunction(Object.keys(newValue))}'`,
         );
 
-        if (newValue.hex || newValue.name) {
-            this.setByString(newValue.hex || newValue.name);
+        if (newValue.hexString || newValue.name) {
+            this.setByString(newValue.hexString || newValue.name);
         } else {
             const [
                 colorFormatName,
@@ -232,7 +238,7 @@ export class Color {
                 Partial<Record<string,
                         number>>,
             ] = assertWrap.isDefined(
-                getObjectTypedEntries(newValue as Omit<typeof newValue, 'name' | 'hex'>)[0],
+                getObjectTypedEntries(newValue as Omit<typeof newValue, 'name' | 'hexString'>)[0],
             );
             const colorFormatDefinition = colorFormats[colorFormatName];
 
@@ -255,7 +261,9 @@ export class Color {
                 }),
             ) satisfies number[] as [number, number, number];
 
-            this.setByString(`${colorFormatName}(${orderedColorCoords.join(' ')})`);
+            this.setByString(
+                `${colorFormatDefinition.conversionFormat}(${orderedColorCoords.join(' ')})`,
+            );
         }
     }
 
@@ -266,15 +274,16 @@ export class Color {
     protected pullFromInternalColor() {
         getEnumValues(ColorFormatName).forEach((colorFormatName) => {
             const colorFormatDefinition = colorFormats[colorFormatName];
+            const mappedColorFormatName = colorFormatDefinition.conversionFormat;
             const originalColorDefinition = check.isKeyOf(this.#internalColor.mode, colorFormats)
                 ? colorFormats[this.#internalColor.mode]
                 : undefined;
 
             const converted = clampGamut(
                 colorFormatDefinition.colorSpace === originalColorDefinition?.colorSpace
-                    ? colorFormatName
+                    ? mappedColorFormatName
                     : 'rgb',
-            )(converter(colorFormatName)(this.#internalColor));
+            )(converter(mappedColorFormatName)(this.#internalColor));
 
             /* node:coverage ignore next 5: technically this shouldn't happen, idk how to manually trigger it. */
             if (!converted) {
@@ -304,7 +313,7 @@ export class Color {
             });
         });
 
-        this._allColors[ColorSyntaxName.hex] = formatHex(this.#internalColor) as HexColor;
+        this._allColors.hexString = formatHex(this.#internalColor) as HexColor;
         this._allColors.names = findMatchingColorNames(this.rgb);
         this._allColors[ColorSyntaxName.name] = this._allColors.names[0] || '';
     }
@@ -338,10 +347,10 @@ export class Color {
         });
 
         return {
-            [ColorSyntaxName.hex]: this.hex,
             ...colorFormatStrings,
             names: this.names.join(', ').padEnd(maxColorNameLength, ' '),
-            name: (this.names[0] || '').padEnd(maxColorNameLength, ' '),
+            [ColorSyntaxName.name]: (this.names[0] || '').padEnd(maxColorNameLength, ' '),
+            [ColorSyntaxName.hexString]: this[ColorSyntaxName.hexString],
         };
     }
 
@@ -358,9 +367,9 @@ export class Color {
         });
 
         return {
-            [ColorSyntaxName.hex]: this.hex,
             ...colorFormatStrings,
-            name: this.names[0] || '',
+            [ColorSyntaxName.hexString]: this[ColorSyntaxName.hexString],
+            [ColorSyntaxName.name]: this.names[0] || '',
         };
     }
 
@@ -379,8 +388,12 @@ export class Color {
         return this._allColors.names[0] || '';
     }
     /** The current color expressed as an RGB hex string. */
+    public get hexString() {
+        return this._allColors[ColorSyntaxName.hexString];
+    }
+    /** The current color expressed as an RGB hex coordinates. */
     public get hex() {
-        return copyThroughJson(this._allColors[ColorSyntaxName.hex]) as HexColor;
+        return copyThroughJson(this._allColors[ColorSyntaxName.hex]);
     }
     /** The current color expressed as its RGB coordinate values. */
     public get rgb() {

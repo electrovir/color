@@ -1,8 +1,11 @@
 /* node:coverage disable */
 
 import {css, defineElement, defineElementEvent, html, listen} from 'element-vir';
-import {type ColorSyntaxName, getColorSyntaxFromCssString} from '../color-class/color-formats.js';
-import {Color} from '../color-class/color.js';
+import {
+    type ColorSyntaxName,
+    getColorSyntaxFromCssString,
+} from '../data/color-class/color-formats.js';
+import {Color} from '../data/color-class/color.js';
 import {VirAllColorSpaceSliders} from './vir-all-color-space-sliders.element.js';
 import {VirColorDetails} from './vir-color-details.element.js';
 
