@@ -1,7 +1,7 @@
 /* node:coverage disable */
 
 import {getObjectTypedKeys} from '@augment-vir/common';
-import {css, defineElement, defineElementEvent, html, listen} from 'element-vir';
+import {css, defineElement, defineElementEvent, html, listen, nothing} from 'element-vir';
 import {noNativeSpacing} from 'vira';
 import {
     type ColorCoordinateName,
@@ -19,6 +19,7 @@ import {VirColorSlider} from './vir-color-slider.element.js';
 export const VirColorFormatSliders = defineElement<{
     color: Readonly<Color>;
     colorFormatName: ColorFormatName;
+    showFormatName: boolean;
 }>()({
     tagName: 'vir-color-format-sliders',
     styles: css`
@@ -62,7 +63,11 @@ export const VirColorFormatSliders = defineElement<{
         );
 
         return html`
-            <h3>${inputs.colorFormatName}</h3>
+            ${inputs.showFormatName
+                ? html`
+                      <h3>${inputs.colorFormatName}</h3>
+                  `
+                : nothing}
             ${coordinateTemplates}
         `;
     },

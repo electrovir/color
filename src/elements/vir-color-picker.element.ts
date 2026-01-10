@@ -235,6 +235,7 @@ export const VirColorPicker = defineElement<
                 <${VirColorFormatSliders.assign({
                     color,
                     colorFormatName: state.selectedFormatName,
+                    showFormatName: false,
                 })}
                     ${listen(VirColorFormatSliders.events.colorChange, (event) => {
                         dispatch(new events.colorChange(event.detail));

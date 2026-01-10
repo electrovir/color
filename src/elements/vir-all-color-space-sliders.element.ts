@@ -39,6 +39,7 @@ export const VirAllColorSpaceSliders = defineElement<{color: Readonly<Color>}>()
                             <${VirColorFormatSliders.assign({
                                 color: inputs.color,
                                 colorFormatName,
+                                showFormatName: true,
                             })}
                                 ${listen(VirColorFormatSliders.events.colorChange, (event) => {
                                     dispatch(new events.colorChange(event.detail));
