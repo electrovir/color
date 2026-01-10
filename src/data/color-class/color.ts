@@ -82,6 +82,7 @@ export class Color {
     ) {
         this.set(initValue);
     }
+    /** Checks if the input string can be converted into a color. */
     public static isValidColorString(this: void, value: string): boolean {
         try {
             new Color(value);

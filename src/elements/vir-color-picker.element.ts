@@ -15,12 +15,9 @@ import {
     viraShadows,
     type ViraSelectOption,
 } from 'vira';
-import {
-    ColorFormatName,
-    colorFormats,
-    type ColorFormatName as ColorFormatNameType,
-} from '../data/color-class/color-formats.js';
+import {ColorFormatName, colorFormats} from '../data/color-class/color-formats.js';
 import {Color} from '../data/color-class/color.js';
+import {colorLocalStorageClient} from '../data/local-storage.client.js';
 import {VirColorFormatSliders} from './vir-color-format-sliders.element.js';
 import {VirColorSwatch} from './vir-color-swatch.element.js';
 
@@ -55,7 +52,7 @@ export const VirColorPicker = defineElement<
     },
     state() {
         return {
-            selectedFormatName: ColorFormatName.rgb as ColorFormatNameType,
+            selectedFormatName: colorLocalStorageClient.get.lastFormat() || ColorFormatName.rgb,
             rawInput: undefined as undefined | string,
         };
     },
@@ -76,6 +73,7 @@ export const VirColorPicker = defineElement<
         button {
             ${noNativeFormStyles}
             cursor: pointer;
+            display: flex;
         }
 
         ${ViraPopUpTrigger} {
@@ -93,7 +91,6 @@ export const VirColorPicker = defineElement<
             & ${VirColorSwatch} {
                 width: ${cssVars['vir-color-picker-swatch-width'].value};
                 height: ${cssVars['vir-color-picker-swatch-height'].value};
-                cursor: pointer;
                 box-sizing: border-box;
             }
         }
@@ -228,6 +225,7 @@ export const VirColorPicker = defineElement<
                             updateState({
                                 selectedFormatName: selectedFormat,
                             });
+                            colorLocalStorageClient.set.lastFormat(selectedFormat);
                         }
                     })}
                 ></${ViraSelect}>
@@ -253,9 +251,9 @@ export const VirColorPicker = defineElement<
                 <${ViraPopUpTrigger.assign({
                     keepOpenAfterInteraction: true,
                 })}>
-                    <div class="trigger" slot=${ViraPopUpTrigger.slotNames.trigger}>
+                    <button class="trigger" slot=${ViraPopUpTrigger.slotNames.trigger}>
                         ${swatchTemplate}
-                    </div>
+                    </button>
                     <div class="pop-up" slot=${ViraPopUpTrigger.slotNames.popUp}>
                         ${pickerTemplate}
                     </div>

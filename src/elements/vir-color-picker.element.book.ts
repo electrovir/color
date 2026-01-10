@@ -1,35 +1,9 @@
 /* node:coverage disable */
 
 import {defineBookPage} from 'element-book';
-import {css, defineElement, html, listen} from 'element-vir';
+import {css, html, listen} from 'element-vir';
 import {elementsBookPage} from '../demo/top-level-pages.js';
 import {VirColorPicker} from './vir-color-picker.element.js';
-
-const VirAnimatedSizeWrapper = defineElement()({
-    tagName: 'vir-animated-size-wrapper',
-    styles: css`
-        :host {
-            display: block;
-            animation: resize 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes resize {
-            0% {
-                ${VirColorPicker.cssVars['vir-color-picker-swatch-width'].name}: 50px;
-                ${VirColorPicker.cssVars['vir-color-picker-swatch-height'].name}: 50px;
-            }
-            100% {
-                ${VirColorPicker.cssVars['vir-color-picker-swatch-width'].name}: 200px;
-                ${VirColorPicker.cssVars['vir-color-picker-swatch-height'].name}: 200px;
-            }
-        }
-    `,
-    render() {
-        return html`
-            <slot></slot>
-        `;
-    },
-});
 
 export const virColorPickerBookPage = defineBookPage({
     parent: elementsBookPage,
@@ -97,7 +71,7 @@ export const virColorPickerBookPage = defineBookPage({
                 }
 
                 ${VirColorPicker} {
-                    border: 1px solid black;
+                    border: 1px solid red;
                     animation: resize 2s ease-in-out infinite alternate;
                 }
 

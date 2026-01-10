@@ -78,17 +78,17 @@ describe(getColorSyntaxFromCssString.name, () => {
         {
             it: 'detects hex with 6 characters',
             input: '#ff0000',
-            expect: ColorSyntaxName.hex,
+            expect: ColorSyntaxName.hexString,
         },
         {
             it: 'detects hex with 3 characters',
             input: '#f00',
-            expect: ColorSyntaxName.hex,
+            expect: ColorSyntaxName.hexString,
         },
         {
             it: 'detects hex with 8 characters',
             input: '#ff0000ff',
-            expect: ColorSyntaxName.hex,
+            expect: ColorSyntaxName.hexString,
         },
         {
             it: 'detects named color',

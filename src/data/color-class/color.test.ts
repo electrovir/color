@@ -105,7 +105,7 @@ describe(Color.name, () => {
             [ColorSyntaxName.name]: originalColor.name,
             [ColorSyntaxName.hexString]: originalColor.hexString,
             names: originalColor.names,
-            originalColorSyntax: ColorSyntaxName.hex,
+            originalColorSyntax: ColorSyntaxName.hexString,
         } satisfies SerializedColor);
         await assertSnapshot(testContext, JSON.parse(originalColor.serialize()));
         await assertSnapshot(testContext, originalColor.serialize());

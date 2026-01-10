@@ -339,6 +339,7 @@ export type ColorFormats = Readonly<{
 export const colorFormats = mapObjectValues(
     rawColorFormats,
     (colorFormatName, colorFormatValue) => {
+        /* node:coverage disable */
         const conversionFormat: SupportedConversionFormat | undefined =
             check.isEnumValue(colorFormatName, CuloriConversionFormat) &&
             check.isEnumValue(colorFormatName, ColorFormatName)
@@ -368,6 +369,7 @@ export const colorFormats = mapObjectValues(
                 ColorSyntaxName,
             ),
         } satisfies ColorFormatDefinition;
+        /* node:coverage enable */
     },
 ) satisfies Record<ColorFormatName, ColorFormatDefinition> as Record<
     ColorFormatName,

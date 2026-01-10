@@ -1,6 +1,6 @@
 {
     "name": "@electrovir/color",
-    "version": "1.5.3",
+    "version": "1.6.0",
     "description": "A wrapper for culori with an extremely simple API.",
     "keywords": [
         "color",
@@ -53,9 +53,11 @@
         "@augment-vir/assert": "^31.57.5",
         "@augment-vir/common": "^31.57.5",
         "@augment-vir/web": "^31.57.5",
+        "@electrovir/local-storage-client": "^0.0.1",
         "apca-w3": "^0.1.9",
         "color-name": "^2.1.0",
         "culori": "^4.0.2",
+        "object-shape-tester": "^6.11.0",
         "type-fest": "^5.3.1"
     },
     "devDependencies": {
