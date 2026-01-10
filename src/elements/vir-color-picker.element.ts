@@ -2,9 +2,19 @@
 
 import {checkWrap} from '@augment-vir/assert';
 import {getObjectTypedValues, type PartialWithUndefined} from '@augment-vir/common';
-import {css, defineElement, defineElementEvent, html, listen, onResize} from 'element-vir';
-import {setCssVarValue} from 'lit-css-vars';
-import {ViraPopUpTrigger, ViraSelect, viraShadows, type ViraSelectOption} from 'vira';
+import {css, defineElement, defineElementEvent, html, listen, nothing} from 'element-vir';
+import {
+    Copy24Icon,
+    noNativeFormStyles,
+    viraFontCssVars,
+    viraFormCssVars,
+    ViraIcon,
+    ViraInput,
+    ViraPopUpTrigger,
+    ViraSelect,
+    viraShadows,
+    type ViraSelectOption,
+} from 'vira';
 import {
     ColorFormatName,
     type ColorFormatName as ColorFormatNameType,
@@ -23,6 +33,8 @@ const colorFormatOptions: ReadonlyArray<Readonly<ViraSelectOption>> = getObjectT
 /**
  * A color picker element with a swatch that opens a popup with color format sliders.
  *
+ * Set the width and height of the swatch using the provided CSS variables.
+ *
  * @category Elements
  */
 export const VirColorPicker = defineElement<
@@ -31,17 +43,19 @@ export const VirColorPicker = defineElement<
             color: string | Readonly<Color> | undefined;
         } & PartialWithUndefined<{
             alwaysShowPicker: boolean;
+            showHexValue: boolean;
         }>
     >
 >()({
     tagName: 'vir-color-picker',
     cssVars: {
-        'vir-color-picker-width': '100px',
-        'vir-color-picker-height': '100px',
+        'vir-color-picker-swatch-width': '100px',
+        'vir-color-picker-swatch-height': '100px',
     },
     state() {
         return {
             selectedFormatName: ColorFormatName.rgb as ColorFormatNameType,
+            rawInput: undefined as undefined | string,
         };
     },
     hostClasses: {
@@ -58,102 +72,208 @@ export const VirColorPicker = defineElement<
             gap: 4px;
         }
 
+        button {
+            ${noNativeFormStyles}
+            cursor: pointer;
+        }
+
         ${ViraPopUpTrigger} {
             width: 100%;
             height: 100%;
             box-sizing: border-box;
         }
 
-        ${VirColorSwatch} {
-            width: ${cssVars['vir-color-picker-width'].value};
-            height: ${cssVars['vir-color-picker-height'].value};
-            cursor: pointer;
-            box-sizing: border-box;
+        .swatch-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+
+            & ${VirColorSwatch} {
+                width: ${cssVars['vir-color-picker-swatch-width'].value};
+                height: ${cssVars['vir-color-picker-swatch-height'].value};
+                cursor: pointer;
+                box-sizing: border-box;
+            }
+        }
+
+        .code-button {
+            font-family: ${viraFontCssVars['vira-monospace'].value};
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            align-items: center;
+
+            & ${ViraIcon} {
+                width: 18px;
+                aspect-ratio: 1;
+            }
+
+            &:hover {
+                color: #000;
+            }
+
+            &:active {
+                color: dodgerblue;
+            }
         }
 
         .picker {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 4px;
             padding: 16px;
             background: white;
             border: 1px solid #ccc;
             border-radius: 8px;
         }
 
-        .pop-up {
+        .pop-up .picker {
             ${viraShadows.menuShadow}
+        }
+
+        .raw-input-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 12px;
+            ${viraFormCssVars['vira-form-border-color'].name}: #ddd;
+            color: #666;
+
+            & ${ViraInput} {
+                flex-grow: 1;
+                width: unset;
+                color: inherit;
+                height: 20px;
+                border: none;
+            }
         }
     `,
     events: {
         colorChange: defineElementEvent<string>(),
     },
-    render({inputs, dispatch, events, state, updateState, host, cssVars}) {
+    render({inputs, dispatch, events, state, updateState}) {
         const color: Readonly<Color> = Color.isColor(inputs.color)
             ? inputs.color
             : new Color(inputs.color || 'black');
 
+        const rawInput = state.rawInput ?? color.toCss()[state.selectedFormatName];
+
+        const rawInputTemplate = html`
+            <div class="raw-input-wrapper">
+                <${ViraInput.assign({
+                    value: rawInput,
+                })}
+                    ${listen(ViraInput.events.valueChange, (event) => {
+                        updateState({
+                            rawInput: event.detail,
+                        });
+                        if (Color.isValidColorString(rawInput)) {
+                            dispatch(new events.colorChange(rawInput));
+                        }
+                    })}
+                ></${ViraInput}>
+                <button
+                    class="code-button"
+                    ${listen('click', async () => {
+                        await globalThis.navigator.clipboard.writeText(rawInput);
+                    })}
+                >
+                    <${ViraIcon.assign({
+                        icon: Copy24Icon,
+                        fitContainer: true,
+                    })}></${ViraIcon}>
+                </button>
+            </div>
+        `;
+
+        const hexValueTemplate = html`
+            <button
+                class="code-button"
+                ${listen('click', async () => {
+                    await globalThis.navigator.clipboard.writeText(color.hex);
+                })}
+            >
+                <span>${color.hex}</span>
+                <${ViraIcon.assign({
+                    icon: Copy24Icon,
+                    fitContainer: true,
+                })}></${ViraIcon}>
+            </button>
+        `;
+
         const swatchTemplate = html`
-            <${VirColorSwatch.assign({
-                backgroundColor: color,
-            })}></${VirColorSwatch}>
+            <div class="swatch-wrapper">
+                <${VirColorSwatch.assign({
+                    backgroundColor: color,
+                })}></${VirColorSwatch}>
+                ${inputs.showHexValue ? hexValueTemplate : nothing}
+            </div>
         `;
 
         const pickerTemplate = html`
-            <${ViraSelect.assign({
-                options: colorFormatOptions,
-                value: state.selectedFormatName,
-            })}
-                ${listen(ViraSelect.events.valueChange, (event) => {
-                    const selectedFormat = checkWrap.isEnumValue(event.detail, ColorFormatName);
-                    if (selectedFormat) {
-                        updateState({
-                            selectedFormatName: selectedFormat,
-                        });
-                    }
+            <div class="picker">
+                <${ViraSelect.assign({
+                    options: colorFormatOptions,
+                    value: state.selectedFormatName,
                 })}
-            ></${ViraSelect}>
-            <${VirColorFormatSliders.assign({
-                color,
-                colorFormatName: state.selectedFormatName,
-            })}
-                ${listen(VirColorFormatSliders.events.colorChange, (event) => {
-                    dispatch(new events.colorChange(event.detail));
+                    ${listen(ViraSelect.events.valueChange, (event) => {
+                        const selectedFormat = checkWrap.isEnumValue(event.detail, ColorFormatName);
+                        if (selectedFormat) {
+                            updateState({
+                                selectedFormatName: selectedFormat,
+                            });
+                        }
+                    })}
+                ></${ViraSelect}>
+                ${rawInputTemplate}
+                <${VirColorFormatSliders.assign({
+                    color,
+                    colorFormatName: state.selectedFormatName,
                 })}
-            ></${VirColorFormatSliders}>
+                    ${listen(VirColorFormatSliders.events.colorChange, (event) => {
+                        dispatch(new events.colorChange(event.detail));
+                    })}
+                ></${VirColorFormatSliders}>
+            </div>
         `;
 
         if (inputs.alwaysShowPicker) {
             return html`
-                ${swatchTemplate}
-                <div class="picker">${pickerTemplate}</div>
+                ${swatchTemplate} ${pickerTemplate}
             `;
         } else {
             return html`
                 <${ViraPopUpTrigger.assign({
                     keepOpenAfterInteraction: true,
-                })}
-                    ${onResize((size) => {
-                        setCssVarValue({
-                            onElement: host,
-                            forCssVar: cssVars['vir-color-picker-width'],
-                            toValue: `${size.contentRect.width}px`,
-                        });
-                        setCssVarValue({
-                            onElement: host,
-                            forCssVar: cssVars['vir-color-picker-height'],
-                            toValue: `${size.contentRect.height}px`,
-                        });
-                    })}
-                >
+                })}>
                     <div class="trigger" slot=${ViraPopUpTrigger.slotNames.trigger}>
                         ${swatchTemplate}
                     </div>
-                    <div class="picker pop-up" slot=${ViraPopUpTrigger.slotNames.popUp}>
+                    <div class="pop-up" slot=${ViraPopUpTrigger.slotNames.popUp}>
                         ${pickerTemplate}
                     </div>
                 </${ViraPopUpTrigger}>
             `;
         }
     },
+});
+
+console.log(String(VirColorPicker.cssVars['vir-color-picker-swatch-width'].name));
+
+CSS.registerProperty({
+    name: String(VirColorPicker.cssVars['vir-color-picker-swatch-width'].name),
+    syntax: '<length>',
+    inherits: true,
+    initialValue: VirColorPicker.cssVars['vir-color-picker-swatch-width'].default,
+});
+
+CSS.registerProperty({
+    name: String(VirColorPicker.cssVars['vir-color-picker-swatch-height'].name),
+    syntax: '<length>',
+    inherits: true,
+    initialValue: VirColorPicker.cssVars['vir-color-picker-swatch-height'].default,
 });

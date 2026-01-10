@@ -15,12 +15,12 @@ const VirAnimatedSizeWrapper = defineElement()({
 
         @keyframes resize {
             0% {
-                width: 50px;
-                height: 50px;
+                ${VirColorPicker.cssVars['vir-color-picker-swatch-width'].name}: 50px;
+                ${VirColorPicker.cssVars['vir-color-picker-swatch-height'].name}: 50px;
             }
             100% {
-                width: 200px;
-                height: 200px;
+                ${VirColorPicker.cssVars['vir-color-picker-swatch-width'].name}: 200px;
+                ${VirColorPicker.cssVars['vir-color-picker-swatch-height'].name}: 200px;
             }
         }
     `,
@@ -58,8 +58,8 @@ export const virColorPickerBookPage = defineBookPage({
             title: 'resized',
             styles: css`
                 ${VirColorPicker} {
-                    width: 50px;
-                    height: 50px;
+                    ${VirColorPicker.cssVars['vir-color-picker-swatch-width'].name}: 50px;
+                    ${VirColorPicker.cssVars['vir-color-picker-swatch-height'].name}: 50px;
                 }
             `,
             state() {
@@ -85,13 +85,24 @@ export const virColorPickerBookPage = defineBookPage({
                 'Verifying that vir-color-picker automatically adjusts sizing.',
             ],
             styles: css`
+                @keyframes resize {
+                    0% {
+                        ${VirColorPicker.cssVars['vir-color-picker-swatch-width'].name}: 50px;
+                        ${VirColorPicker.cssVars['vir-color-picker-swatch-height'].name}: 50px;
+                    }
+                    100% {
+                        ${VirColorPicker.cssVars['vir-color-picker-swatch-width'].name}: 200px;
+                        ${VirColorPicker.cssVars['vir-color-picker-swatch-height'].name}: 200px;
+                    }
+                }
+
                 ${VirColorPicker} {
-                    width: 100%;
-                    height: 100%;
                     border: 1px solid black;
+                    animation: resize 2s ease-in-out infinite alternate;
                 }
 
                 .max-size {
+                    display: block;
                     width: 200px;
                     height: 200px;
                 }
@@ -104,21 +115,19 @@ export const virColorPickerBookPage = defineBookPage({
             render({state, updateState}) {
                 return html`
                     <div class="max-size">
-                        <${VirAnimatedSizeWrapper}>
-                            <${VirColorPicker.assign({
-                                color: state.currentColor,
+                        <${VirColorPicker.assign({
+                            color: state.currentColor,
+                        })}
+                            ${listen(VirColorPicker.events.colorChange, (event) => {
+                                updateState({currentColor: event.detail});
                             })}
-                                ${listen(VirColorPicker.events.colorChange, (event) => {
-                                    updateState({currentColor: event.detail});
-                                })}
-                            ></${VirColorPicker}>
-                        </${VirAnimatedSizeWrapper}>
+                        ></${VirColorPicker}>
                     </div>
                 `;
             },
         });
         defineExample({
-            title: 'always show',
+            title: 'always show picker',
             state() {
                 return {
                     currentColor: undefined as string | undefined,
@@ -129,6 +138,27 @@ export const virColorPickerBookPage = defineBookPage({
                     <${VirColorPicker.assign({
                         color: state.currentColor,
                         alwaysShowPicker: true,
+                    })}
+                        ${listen(VirColorPicker.events.colorChange, (event) => {
+                            updateState({currentColor: event.detail});
+                        })}
+                    ></${VirColorPicker}>
+                `;
+            },
+        });
+        defineExample({
+            title: 'show hex',
+            state() {
+                return {
+                    currentColor: undefined as string | undefined,
+                };
+            },
+            render({state, updateState}) {
+                return html`
+                    <${VirColorPicker.assign({
+                        color: state.currentColor,
+                        alwaysShowPicker: true,
+                        showHexValue: true,
                     })}
                         ${listen(VirColorPicker.events.colorChange, (event) => {
                             updateState({currentColor: event.detail});

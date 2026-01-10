@@ -6,7 +6,7 @@ import {
     omitObjectKeys,
     stringify,
 } from '@augment-vir/common';
-import {assertSnapshot, describe, it} from '@augment-vir/test';
+import {assertSnapshot, describe, it, itCases} from '@augment-vir/test';
 import {ColorFormatName, ColorSyntaxName} from './color-formats.js';
 import {Color, type ColorUpdate, type SerializedColor} from './color.js';
 import {allExamples, namedExamples} from './color.mock.js';
@@ -189,5 +189,25 @@ describe(Color.name, () => {
 
         const expectedKeys = Object.keys(omitObjectKeys(color.allColors, ['names'])).sort();
         assert.hasValues(Array.from(formatsUsed), expectedKeys);
+    });
+
+    describe(Color.isValidColorString.name, () => {
+        itCases(Color.isValidColorString, [
+            {
+                it: 'accepts color names',
+                input: 'blue',
+                expect: true,
+            },
+            {
+                it: 'accepts rgb',
+                input: 'rgb(255 255 255)',
+                expect: true,
+            },
+            {
+                it: 'rejects invalid colors',
+                input: 'I like turtles',
+                expect: false,
+            },
+        ]);
     });
 });

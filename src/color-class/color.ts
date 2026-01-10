@@ -82,9 +82,17 @@ export class Color {
     ) {
         this.set(initValue);
     }
+    public static isValidColorString(this: void, value: string): boolean {
+        try {
+            new Color(value);
+            return true;
+        } catch {
+            return false;
+        }
+    }
 
     /** Checks, with a type guard, that a given input is a Color class instance. */
-    public static isColor<T>(value: T): value is Extract<T, Readonly<Color>> {
+    public static isColor<T>(this: void, value: T): value is Extract<T, Readonly<Color>> {
         return value instanceof Color;
     }
 
@@ -92,7 +100,7 @@ export class Color {
      * Create a new {@link Color} instance by parsing the output of another instance's
      * {@link Color.serialize} method.
      */
-    public static deserialize(input: string) {
+    public static deserialize(this: void, input: string) {
         const parsed = JSON.parse(input) as SerializedColor;
         const newColor = new Color('black');
         getObjectTypedEntries(parsed).forEach(
