@@ -1,10 +1,17 @@
 /* node:coverage disable */
 
-import {getObjectTypedEntries, omitObjectKeys} from '@augment-vir/common';
+import {check} from '@augment-vir/assert';
+import {getObjectTypedEntries, mapObject} from '@augment-vir/common';
 import {css, defineElement, defineElementEvent, html, listen} from 'element-vir';
 import {defineTable, noNativeSpacing, viraFontCssVars, ViraInput} from 'vira';
+import {ColorSyntaxName} from '../data/color-class/color-formats.js';
 import {Color} from '../data/color-class/color.js';
 import {VirColorSwatch} from './vir-color-swatch.element.js';
+
+const omittedColors: ColorSyntaxName[] = [
+    ColorSyntaxName.hex,
+    ColorSyntaxName.name,
+];
 
 /**
  * A color swatch alongside the color in all of its different supported formats.
@@ -65,7 +72,21 @@ export const VirColorDetails = defineElement<{
     },
     render({inputs, dispatch, events, state, updateState}) {
         const color = new Color(inputs.color);
-        const colorStrings = omitObjectKeys(color.toFormattedStrings(), ['name']);
+        const colorStrings = mapObject(color.toFormattedStrings(), (key, value) => {
+            if (check.hasValue(omittedColors, key)) {
+                return undefined;
+            } else if (key === 'hexString') {
+                return {
+                    key: 'hex',
+                    value,
+                };
+            }
+
+            return {
+                key,
+                value,
+            };
+        });
 
         if (state.inputColorString == undefined) {
             updateState({

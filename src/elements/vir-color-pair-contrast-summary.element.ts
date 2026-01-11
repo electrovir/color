@@ -142,8 +142,8 @@ export const VirColorPairContrastSummary = defineElement<{
                 },
             ],
             getObjectTypedEntries({
-                'Foreground:': new Color(inputs.foregroundColor).toCss().hex,
-                'Background:': new Color(inputs.backgroundColor).toCss().hex,
+                'Foreground:': new Color(inputs.foregroundColor).toFormattedStrings().hexString,
+                'Background:': new Color(inputs.backgroundColor).toFormattedStrings().hexString,
                 'Contrast:': `${contrast.contrast} Lc`.padEnd(9, ' '),
             }),
             ([
