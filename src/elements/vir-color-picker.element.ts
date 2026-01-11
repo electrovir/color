@@ -2,7 +2,15 @@
 
 import {checkWrap} from '@augment-vir/assert';
 import {getObjectTypedValues, type PartialWithUndefined} from '@augment-vir/common';
-import {css, defineElement, defineElementEvent, html, listen, nothing} from 'element-vir';
+import {
+    css,
+    defineElement,
+    defineElementEvent,
+    html,
+    listen,
+    nothing,
+    onDomCreated,
+} from 'element-vir';
 import {
     Copy24Icon,
     noNativeFormStyles,
@@ -133,6 +141,7 @@ export const VirColorPicker = defineElement<
         }
 
         .raw-input-wrapper {
+            text-align: left;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -167,8 +176,9 @@ export const VirColorPicker = defineElement<
                     value: rawInput,
                 })}
                     ${listen(ViraInput.events.valueChange, (event) => {
+                        const rawInput = event.detail;
                         updateState({
-                            rawInput: event.detail,
+                            rawInput,
                         });
                         if (Color.isValidColorString(rawInput)) {
                             dispatch(new events.colorChange(rawInput));
@@ -219,6 +229,14 @@ export const VirColorPicker = defineElement<
                     options: colorFormatOptions,
                     value: state.selectedFormatName,
                 })}
+                    ${onDomCreated(() => {
+                        const storedFormat = colorLocalStorageClient.get.lastFormat();
+                        if (storedFormat) {
+                            updateState({
+                                selectedFormatName: storedFormat,
+                            });
+                        }
+                    })}
                     ${listen(ViraSelect.events.valueChange, (event) => {
                         const selectedFormat = checkWrap.isEnumValue(event.detail, ColorFormatName);
                         if (selectedFormat) {
@@ -263,16 +281,18 @@ export const VirColorPicker = defineElement<
     },
 });
 
-CSS.registerProperty({
-    name: String(VirColorPicker.cssVars['vir-color-picker-swatch-width'].name),
-    syntax: '<length>',
-    inherits: true,
-    initialValue: VirColorPicker.cssVars['vir-color-picker-swatch-width'].default,
-});
+if ('CSS' in globalThis) {
+    globalThis.CSS.registerProperty({
+        name: String(VirColorPicker.cssVars['vir-color-picker-swatch-width'].name),
+        syntax: '<length>',
+        inherits: true,
+        initialValue: VirColorPicker.cssVars['vir-color-picker-swatch-width'].default,
+    });
 
-CSS.registerProperty({
-    name: String(VirColorPicker.cssVars['vir-color-picker-swatch-height'].name),
-    syntax: '<length>',
-    inherits: true,
-    initialValue: VirColorPicker.cssVars['vir-color-picker-swatch-height'].default,
-});
+    globalThis.CSS.registerProperty({
+        name: String(VirColorPicker.cssVars['vir-color-picker-swatch-height'].name),
+        syntax: '<length>',
+        inherits: true,
+        initialValue: VirColorPicker.cssVars['vir-color-picker-swatch-height'].default,
+    });
+}
