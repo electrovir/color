@@ -255,6 +255,9 @@ export const VirColorPicker = defineElement<
                 })}
                     ${listen(VirColorFormatSliders.events.colorChange, (event) => {
                         dispatch(new events.colorChange(event.detail));
+                        updateState({
+                            rawInput: undefined,
+                        });
                     })}
                 ></${VirColorFormatSliders}>
             </div>
