@@ -177,10 +177,16 @@ export function findColorAtContrastLevel(
 
     const bestMatch = otherColors.reduce(
         (best, otherColor) => {
-            const contrast = calculateContrast({
+            const comparison = {
                 foreground: check.isString(colors.foreground) ? colors.foreground : otherColor,
                 background: check.isString(colors.background) ? colors.background : otherColor,
-            });
+            };
+
+            if (comparison.foreground === comparison.background) {
+                return best;
+            }
+
+            const contrast = calculateContrast(comparison);
             const contrastIndex = orderedContrastLevelNames.indexOf(contrast.contrastLevel.name);
             const distance = contrastIndex - desiredIndex;
 
