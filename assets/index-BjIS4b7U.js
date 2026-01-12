@@ -2093,7 +2093,7 @@ Font weights to font sizes:`,JSON.stringify(d$(o.data.min),null,4)].join(`
                 ></${vf}>
                 ${u}
                 <${Wo.assign({color:o,colorFormatName:r.selectedFormatName,showFormatName:!1})}
-                    ${re(Wo.events.colorChange,d=>{t(new n.colorChange(d.detail))})}
+                    ${re(Wo.events.colorChange,d=>{t(new n.colorChange(d.detail)),i({rawInput:void 0})})}
                 ></${Wo}>
             </div>
         `;return e.alwaysShowPicker?F`
