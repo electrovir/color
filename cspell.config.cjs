@@ -14,6 +14,7 @@ module.exports = {
         'darkgrey',
         'darkslategray',
         'darkslategrey',
+        'deeppink',
         'dimgray',
         'dimgrey',
         'dlab',

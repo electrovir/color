@@ -1,6 +1,6 @@
 {
     "name": "@electrovir/color",
-    "version": "1.6.5",
+    "version": "1.7.0",
     "description": "A wrapper for culori with an extremely simple API.",
     "keywords": [
         "color",

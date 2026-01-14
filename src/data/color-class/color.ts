@@ -12,7 +12,14 @@ import {
     type PartialWithUndefined,
 } from '@augment-vir/common';
 import colorNames from 'color-name';
-import {clampGamut, converter, formatHex, parse, type Color as CuloriColor} from 'culori';
+import {
+    clampGamut,
+    converter,
+    differenceEuclidean,
+    formatHex,
+    parse,
+    type Color as CuloriColor,
+} from 'culori';
 import {type RequireExactlyOne} from 'type-fest';
 import {
     ColorFormatName,
@@ -63,6 +70,8 @@ export type AllColorsValues = ColorValue & {
 export type SerializedColor = AllColorsValues & {
     originalColorSyntax: ColorSyntaxName;
 };
+
+const distanceRgb = differenceEuclidean('rgb');
 
 /**
  * A `Color` class with state and the following features:
@@ -122,6 +131,33 @@ export class Color {
         );
 
         return newColor;
+    }
+
+    /** Get the distance from this Color class instance to the given CSS color string. */
+    public getRgbDistance(distanceFrom: string) {
+        return distanceRgb(this.#internalColor, distanceFrom);
+    }
+
+    /** Get the closest named CSS color to this Color class instance's current color. */
+    public getClosestNamedColor(): string {
+        return getObjectTypedKeys(colorNames).reduce(
+            (best, currentName) => {
+                const colorDistance = this.getRgbDistance(currentName);
+
+                if (colorDistance < best.distance) {
+                    return {
+                        distance: colorDistance,
+                        name: currentName,
+                    };
+                } else {
+                    return best;
+                }
+            },
+            {
+                name: '',
+                distance: Infinity,
+            },
+        ).name;
     }
 
     /**

@@ -3,6 +3,7 @@ import {
     awaitedForEach,
     copyThroughJson,
     getEnumValues,
+    mapEnumToObject,
     omitObjectKeys,
     stringify,
 } from '@augment-vir/common';
@@ -12,6 +13,29 @@ import {Color, type ColorUpdate, type SerializedColor} from './color.js';
 import {allExamples, namedExamples} from './color.mock.js';
 
 describe(Color.name, () => {
+    describe('getClosestNamedColor', () => {
+        itCases(
+            (colorString: string) => new Color(colorString).getClosestNamedColor(),
+            [
+                {
+                    it: 'works on a color name',
+                    input: 'blue',
+                    expect: 'blue',
+                },
+                {
+                    it: 'works on a hex value',
+                    input: '#0000ff',
+                    expect: 'blue',
+                },
+                {
+                    it: 'works on a random value',
+                    input: '#f6226f',
+                    expect: 'deeppink',
+                },
+            ],
+        );
+    });
+
     it('has all color formats', () => {
         assert.tsType<ColorFormatName>().matches<keyof Color>;
         /** Verify that adding a new color format will fail this test. */
@@ -58,6 +82,12 @@ describe(Color.name, () => {
     });
     it('formats as strings', async (testContext) => {
         await assertSnapshot(testContext, new Color(namedExamples.hwbSet).toFormattedStrings());
+    });
+    it('stores all color syntaxes at top level', async (testContext) => {
+        const color = new Color(namedExamples.hwbSet);
+        const allColors = mapEnumToObject(ColorSyntaxName, (syntax) => color[syntax]);
+
+        await assertSnapshot(testContext, allColors);
     });
     it('updates a single coordinate', () => {
         const color = new Color('#583758');

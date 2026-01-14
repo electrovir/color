@@ -949,6 +949,50 @@ export default {
             "h": 29.2
         }
     },
+    "Color > stores all color syntaxes at top level 1": {
+        "rgb": {
+            "r": 255,
+            "g": 25,
+            "b": 25
+        },
+        "hex": {
+            "r": 255,
+            "g": 25,
+            "b": 25
+        },
+        "hsl": {
+            "h": 0,
+            "s": 100,
+            "l": 55
+        },
+        "hwb": {
+            "h": 0,
+            "w": 10,
+            "b": 0
+        },
+        "lab": {
+            "l": 55.1,
+            "a": 79,
+            "b": 63
+        },
+        "lch": {
+            "l": 55.1,
+            "c": 101,
+            "h": 39
+        },
+        "oklab": {
+            "l": 0.634,
+            "a": 0.221,
+            "b": 0.12
+        },
+        "oklch": {
+            "l": 0.634,
+            "c": 0.251,
+            "h": 28.5
+        },
+        "name": "",
+        "hexString": "#ff1919"
+    },
     "Color > updates its values 1": {
         "names": [],
         "name": "",
