@@ -2,15 +2,7 @@
 
 import {checkWrap} from '@augment-vir/assert';
 import {getObjectTypedValues, type PartialWithUndefined} from '@augment-vir/common';
-import {
-    css,
-    defineElement,
-    defineElementEvent,
-    html,
-    listen,
-    nothing,
-    onDomCreated,
-} from 'element-vir';
+import {css, defineElement, defineElementEvent, html, listen, nothing} from 'element-vir';
 import {
     Copy24Icon,
     noNativeFormStyles,
@@ -229,14 +221,6 @@ export const VirColorPicker = defineElement<
                     options: colorFormatOptions,
                     value: state.selectedFormatName,
                 })}
-                    ${onDomCreated(() => {
-                        const storedFormat = colorLocalStorageClient.get.lastFormat();
-                        if (storedFormat) {
-                            updateState({
-                                selectedFormatName: storedFormat,
-                            });
-                        }
-                    })}
                     ${listen(ViraSelect.events.valueChange, (event) => {
                         const selectedFormat = checkWrap.isEnumValue(event.detail, ColorFormatName);
                         if (selectedFormat) {
@@ -272,7 +256,18 @@ export const VirColorPicker = defineElement<
                 <${ViraPopUpTrigger.assign({
                     keepOpenAfterInteraction: true,
                 })}>
-                    <button class="trigger" slot=${ViraPopUpTrigger.slotNames.trigger}>
+                    <button
+                        class="trigger"
+                        slot=${ViraPopUpTrigger.slotNames.trigger}
+                        ${listen('mousedown', () => {
+                            const storedFormat = colorLocalStorageClient.get.lastFormat();
+                            if (storedFormat) {
+                                updateState({
+                                    selectedFormatName: storedFormat,
+                                });
+                            }
+                        })}
+                    >
                         ${swatchTemplate}
                     </button>
                     <div class="pop-up" slot=${ViraPopUpTrigger.slotNames.popUp}>
