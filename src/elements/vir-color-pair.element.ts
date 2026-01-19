@@ -2,17 +2,10 @@
 
 import {assertWrap, check} from '@augment-vir/assert';
 import {css, defineElement, html, listen, nothing, onDomCreated, unsafeCSS} from 'element-vir';
-import {type SingleCssVarDefinition} from 'lit-css-vars';
 import {noNativeFormStyles, noNativeSpacing, viraFontCssVars} from 'vira';
+import {colorCss, type ColorPair} from '../data/color-css.js';
 import {calculateContrast, type FontWeight} from '../data/contrast/contrast.js';
 import {VirContrastIndicator} from './vir-contrast-indicator.element.js';
-
-/**
- * A foreground/background color pair.
- *
- * @category Internal
- */
-export type ColorPair = Record<'foreground' | 'background', SingleCssVarDefinition>;
 
 /**
  * Showcase a foreground/backend color pair.
@@ -194,10 +187,7 @@ export const VirColorPair = defineElement<{
                     });
                 })}
                 class="color-preview"
-                style=${css`
-                    color: ${unsafeCSS(inputs.color.foreground.default)};
-                    background: ${unsafeCSS(inputs.color.background.default)};
-                `}
+                style=${colorCss(inputs.color)}
             >
                 <div class="square"></div>
                 <b>Aa</b>
