@@ -19,7 +19,7 @@ export const VirColorPair = defineElement<{
     showContrast: boolean;
     fontWeight: FontWeight;
 }>()({
-    tagName: 'theme-vir-color-example',
+    tagName: 'vir-color-pair',
     state() {
         return {
             previewElement: undefined as undefined | HTMLElement,
@@ -27,7 +27,7 @@ export const VirColorPair = defineElement<{
         };
     },
     hostClasses: {
-        'theme-vir-color-example-no-contrast-tips': ({inputs, state}) =>
+        'vir-color-pair-no-contrast-tips': ({inputs, state}) =>
             !inputs.showContrast && !state.forceShowEverything,
     },
     styles: ({hostClasses}) => css`
@@ -63,7 +63,7 @@ export const VirColorPair = defineElement<{
                 background-color: currentColor;
             }
         }
-        ${hostClasses['theme-vir-color-example-no-contrast-tips'].selector} {
+        ${hostClasses['vir-color-pair-no-contrast-tips'].selector} {
             & .needed-size-wrapper {
                 display: none;
             }
