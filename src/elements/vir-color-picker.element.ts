@@ -3,6 +3,7 @@
 import {checkWrap} from '@augment-vir/assert';
 import {getObjectTypedValues, type PartialWithUndefined} from '@augment-vir/common';
 import {css, defineElement, defineElementEvent, html, listen, nothing} from 'element-vir';
+import {CssVarSyntaxName} from 'lit-css-vars';
 import {
     Copy24Icon,
     noNativeFormStyles,
@@ -47,8 +48,14 @@ export const VirColorPicker = defineElement<
 >()({
     tagName: 'vir-color-picker',
     cssVars: {
-        'vir-color-picker-swatch-width': '100px',
-        'vir-color-picker-swatch-height': '100px',
+        'vir-color-picker-swatch-width': {
+            default: '100px',
+            syntax: CssVarSyntaxName.Length,
+        },
+        'vir-color-picker-swatch-height': {
+            default: '100px',
+            syntax: CssVarSyntaxName.Length,
+        },
     },
     state() {
         return {
@@ -278,19 +285,3 @@ export const VirColorPicker = defineElement<
         }
     },
 });
-
-if ('CSS' in globalThis) {
-    globalThis.CSS.registerProperty({
-        name: String(VirColorPicker.cssVars['vir-color-picker-swatch-width'].name),
-        syntax: '<length>',
-        inherits: true,
-        initialValue: VirColorPicker.cssVars['vir-color-picker-swatch-width'].default,
-    });
-
-    globalThis.CSS.registerProperty({
-        name: String(VirColorPicker.cssVars['vir-color-picker-swatch-height'].name),
-        syntax: '<length>',
-        inherits: true,
-        initialValue: VirColorPicker.cssVars['vir-color-picker-swatch-height'].default,
-    });
-}
