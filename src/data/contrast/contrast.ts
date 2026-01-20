@@ -106,6 +106,9 @@ export type CalculateContrastParams = {
     background: string;
 };
 
+/** Cache for contrast calculations to avoid redundant computation. */
+const contrastCache = new Map();
+
 /**
  * Calculate contrast for the given color combination.
  *
@@ -115,13 +118,19 @@ export function calculateContrast({
     background,
     foreground,
 }: Readonly<CalculateContrastParams>): CalculatedContrast {
-    const contrast: number = round(Number(calcAPCA(foreground, background)), {digits: 1});
-
-    return {
+    const cacheKey = `${foreground}|${background}`;
+    const cached = contrastCache.get(cacheKey);
+    if (cached) {
+        return cached;
+    }
+    const contrast = round(Number(calcAPCA(foreground, background)), {digits: 1});
+    const result = {
         contrast,
         fontSizes: calculateFontSizes(contrast),
         contrastLevel: determineContrastLevel(contrast),
     };
+    contrastCache.set(cacheKey, result);
+    return result;
 }
 
 /** @category Internal */
