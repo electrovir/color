@@ -2,9 +2,8 @@
 
 import {assertWrap, check} from '@augment-vir/assert';
 import {css, defineElement, html, listen, nothing, onDomCreated, unsafeCSS} from 'element-vir';
-import {setCssVarValue} from 'lit-css-vars';
 import {noNativeFormStyles, noNativeSpacing, viraFontCssVars} from 'vira';
-import {colorCss, type ColorPair} from '../data/color-css.js';
+import {type ColorPair} from '../data/color-css.js';
 import {calculateContrast, type FontWeight} from '../data/contrast/contrast.js';
 import {VirContrastIndicator} from './vir-contrast-indicator.element.js';
 
@@ -119,18 +118,7 @@ export const VirColorPair = defineElement<{
             margin-top: 1px;
         }
     `,
-    render({state, updateState, inputs, host}) {
-        setCssVarValue({
-            onElement: host,
-            forCssVar: inputs.color.background,
-            toValue: inputs.color.background.default,
-        });
-        setCssVarValue({
-            onElement: host,
-            forCssVar: inputs.color.foreground,
-            toValue: inputs.color.foreground.default,
-        });
-
+    render({state, updateState, inputs}) {
         const colorRows = (
             [
                 'foreground',
@@ -199,7 +187,10 @@ export const VirColorPair = defineElement<{
                     });
                 })}
                 class="color-preview"
-                style=${colorCss(inputs.color)}
+                style=${css`
+                    color: ${unsafeCSS(inputs.color.foreground.default)};
+                    background: ${unsafeCSS(inputs.color.background.default)};
+                `}
             >
                 <div class="square"></div>
                 <b>Aa</b>

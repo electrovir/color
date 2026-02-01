@@ -1,5 +1,7 @@
 import {assert} from '@augment-vir/assert';
+import {trimLines} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
+import {css} from 'element-vir';
 import {defineCssVars} from 'lit-css-vars';
 import {colorCss, type ColorPair} from './color-css.js';
 
@@ -16,8 +18,13 @@ describe(colorCss.name, () => {
         };
 
         assert.strictEquals(
-            String(colorCss(colorPair)).trim(),
-            `color: var(--mock-foreground);\n        background-color: var(--mock-background);`,
+            trimLines(String(colorCss(colorPair))),
+            trimLines(
+                String(css`
+                    color: var(--mock-foreground, black);
+                    background-color: var(--mock-background, white);
+                `),
+            ),
         );
     });
 
@@ -33,8 +40,13 @@ describe(colorCss.name, () => {
         };
 
         assert.strictEquals(
-            String(colorCss(colorPair)).trim(),
-            `color: var(--mock-foreground);\n        background-color: var(--mock-background);`,
+            trimLines(String(colorCss(colorPair))),
+            trimLines(
+                String(css`
+                    color: var(--mock-foreground, #ff0000);
+                    background-color: var(--mock-background, #00ff00);
+                `),
+            ),
         );
     });
 });
