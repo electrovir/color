@@ -22,7 +22,9 @@ export const virColorPickerBookPage = defineBookPage({
                         color: state.currentColor,
                     })}
                         ${listen(VirColorPicker.events.colorChange, (event) => {
-                            updateState({currentColor: event.detail});
+                            updateState({
+                                currentColor: event.detail,
+                            });
                         })}
                     ></${VirColorPicker}>
                 `;
@@ -47,7 +49,9 @@ export const virColorPickerBookPage = defineBookPage({
                         color: state.currentColor,
                     })}
                         ${listen(VirColorPicker.events.colorChange, (event) => {
-                            updateState({currentColor: event.detail});
+                            updateState({
+                                currentColor: event.detail,
+                            });
                         })}
                     ></${VirColorPicker}>
                 `;
@@ -93,7 +97,9 @@ export const virColorPickerBookPage = defineBookPage({
                             color: state.currentColor,
                         })}
                             ${listen(VirColorPicker.events.colorChange, (event) => {
-                                updateState({currentColor: event.detail});
+                                updateState({
+                                    currentColor: event.detail,
+                                });
                             })}
                         ></${VirColorPicker}>
                     </div>
@@ -114,7 +120,9 @@ export const virColorPickerBookPage = defineBookPage({
                         alwaysShowPicker: true,
                     })}
                         ${listen(VirColorPicker.events.colorChange, (event) => {
-                            updateState({currentColor: event.detail});
+                            updateState({
+                                currentColor: event.detail,
+                            });
                         })}
                     ></${VirColorPicker}>
                 `;
@@ -135,7 +143,9 @@ export const virColorPickerBookPage = defineBookPage({
                         showHexValue: true,
                     })}
                         ${listen(VirColorPicker.events.colorChange, (event) => {
-                            updateState({currentColor: event.detail});
+                            updateState({
+                                currentColor: event.detail,
+                            });
                         })}
                     ></${VirColorPicker}>
                 `;

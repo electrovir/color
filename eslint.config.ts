@@ -1,4 +1,4 @@
-import {defineEslintConfig} from '@virmator/lint/configs/eslint.config.base.mjs';
+import {defineEslintConfig} from '@virmator/lint/configs/eslint.config.base.js';
 import {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -17,6 +17,8 @@ export default [
              * Turn off or on specific rules. See {@link defineEslintConfig} for which plugins are
              * already enabled.
              */
+            /** This plugin is incompatible with ESLint 10 (uses removed `context.getFilename`). */
+            'monorepo-cop/no-relative-import-outside-package': 'off',
         },
     },
 ];

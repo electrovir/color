@@ -123,7 +123,9 @@ export function calculateContrast({
     if (cached) {
         return cached;
     }
-    const contrast = round(Number(calcAPCA(foreground, background)), {digits: 1});
+    const contrast = round(Number(calcAPCA(foreground, background)), {
+        digits: 1,
+    });
     const result = {
         contrast,
         fontSizes: calculateFontSizes(contrast),

@@ -3,7 +3,10 @@
 import {check} from '@augment-vir/assert';
 import {getObjectTypedEntries, mapObject} from '@augment-vir/common';
 import {css, defineElement, defineElementEvent, html, listen} from 'element-vir';
-import {defineTable, noNativeSpacing, viraFontCssVars, ViraInput} from 'vira';
+import {ViraInput} from 'vira/dist/elements/vira-input.element.js';
+import {viraFontCssVars} from 'vira/dist/styles/font.js';
+import {noNativeSpacing} from 'vira/dist/styles/native-styles.js';
+import {defineTable} from 'vira/dist/util/define-table.js';
 import {ColorSyntaxName} from '../data/color-class/color-formats.js';
 import {Color} from '../data/color-class/color.js';
 import {VirColorSwatch} from './vir-color-swatch.element.js';

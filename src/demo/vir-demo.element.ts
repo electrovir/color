@@ -1,8 +1,8 @@
 /* node:coverage disable */
 
-import {ElementBookApp, ElementBookSlotName} from 'element-book';
+import {ElementBookApp} from 'element-book';
 import {css, defineElement, html} from 'element-vir';
-import {noNativeSpacing} from 'vira';
+import {noNativeSpacing} from 'vira/dist/styles/native-styles.js';
 import {allBookPages} from './all-book-pages.js';
 
 export const VirDemo = defineElement()({
@@ -38,7 +38,7 @@ export const VirDemo = defineElement()({
                     basePath: 'color',
                 },
             })}>
-                <h1 slot=${ElementBookSlotName.NavHeader}>@electrovir/color</h1>
+                <h1 slot=${ElementBookApp.slotNames.navHeader}>@electrovir/color</h1>
             </${ElementBookApp}>
         `;
     },

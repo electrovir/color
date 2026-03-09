@@ -22,7 +22,9 @@ export const virAllSpacesColorPickerBookPage = defineBookPage({
                         color: state.currentColor,
                     })}
                         ${listen(VirAllSpacesColorPicker.events.colorChange, (event) => {
-                            updateState({currentColor: event.detail});
+                            updateState({
+                                currentColor: event.detail,
+                            });
                         })}
                     ></${VirAllSpacesColorPicker}>
                 `;

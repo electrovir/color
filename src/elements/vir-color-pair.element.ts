@@ -2,7 +2,8 @@
 
 import {assertWrap, check} from '@augment-vir/assert';
 import {css, defineElement, html, listen, nothing, onDomCreated, unsafeCSS} from 'element-vir';
-import {noNativeFormStyles, noNativeSpacing, viraFontCssVars} from 'vira';
+import {viraFontCssVars} from 'vira/dist/styles/font.js';
+import {noNativeFormStyles, noNativeSpacing} from 'vira/dist/styles/native-styles.js';
 import {type ColorPair} from '../data/color-css.js';
 import {calculateContrast, type FontWeight} from '../data/contrast/contrast.js';
 import {VirContrastIndicator} from './vir-contrast-indicator.element.js';

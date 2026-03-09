@@ -12,7 +12,8 @@ import {
     onDomRendered,
     unsafeCSS,
 } from 'element-vir';
-import {viraFontCssVars, ViraInput} from 'vira';
+import {ViraInput} from 'vira/dist/elements/vira-input.element.js';
+import {viraFontCssVars} from 'vira/dist/styles/font.js';
 import {
     type ColorCoordinateName,
     type ColorFormatDefinition,

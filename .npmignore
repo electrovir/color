@@ -17,7 +17,7 @@
 bash-scripts/
 dist-docs/
 dist-pages/
-eslint.config.mjs
+eslint.config.ts
 generated-config-*
 index.html
 prettier.config.mjs

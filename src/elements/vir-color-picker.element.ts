@@ -4,18 +4,16 @@ import {checkWrap} from '@augment-vir/assert';
 import {getObjectTypedValues, type PartialWithUndefined} from '@augment-vir/common';
 import {css, defineElement, defineElementEvent, html, listen, nothing} from 'element-vir';
 import {CssVarSyntaxName} from 'lit-css-vars';
-import {
-    Copy24Icon,
-    noNativeFormStyles,
-    viraFontCssVars,
-    viraFormCssVars,
-    ViraIcon,
-    ViraInput,
-    ViraPopUpTrigger,
-    ViraSelect,
-    viraShadows,
-    type ViraSelectOption,
-} from 'vira';
+import {ViraPopUpTrigger} from 'vira/dist/elements/pop-up/vira-pop-up-trigger.element.js';
+import {ViraIcon} from 'vira/dist/elements/vira-icon.element.js';
+import {ViraInput} from 'vira/dist/elements/vira-input.element.js';
+import {ViraSelect} from 'vira/dist/elements/vira-select.element.js';
+import {Copy24Icon} from 'vira/dist/icons/icon-svgs/24/copy-24.icon.js';
+import {viraFontCssVars} from 'vira/dist/styles/font.js';
+import {viraFormCssVars} from 'vira/dist/styles/form-styles.js';
+import {noNativeFormStyles} from 'vira/dist/styles/native-styles.js';
+import {viraShadows} from 'vira/dist/styles/shadows.js';
+import {type ViraSelectOption} from 'vira/dist/util/vira-select-option.js';
 import {ColorFormatName, colorFormats} from '../data/color-class/color-formats.js';
 import {Color} from '../data/color-class/color.js';
 import {colorLocalStorageClient} from '../data/local-storage.client.js';

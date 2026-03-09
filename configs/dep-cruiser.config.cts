@@ -14,6 +14,12 @@ const baseConfig = defineConfig({
                 '\\.book\\.',
             ],
         },
+        'not-to-dev-dep': {
+            from: [
+                '\\.book\\.',
+                'src/demo',
+            ],
+        },
     },
     omitRules: [
         // enter rule names here to omit

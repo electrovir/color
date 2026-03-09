@@ -3,7 +3,10 @@
 import {assertWrap} from '@augment-vir/assert';
 import {getObjectTypedEntries, round} from '@augment-vir/common';
 import {classMap, css, defineElement, html, unsafeCSS} from 'element-vir';
-import {defineTable, noNativeSpacing, ViraBoldText, viraFontCssVars} from 'vira';
+import {ViraBoldText} from 'vira/dist/elements/vira-bold-text.element.js';
+import {viraFontCssVars} from 'vira/dist/styles/font.js';
+import {noNativeSpacing} from 'vira/dist/styles/native-styles.js';
+import {defineTable} from 'vira/dist/util/define-table.js';
 import {Color} from '../data/color-class/color.js';
 import {
     calculateContrast,
@@ -181,7 +184,9 @@ export const VirColorPairContrastSummary = defineElement<{
             ),
             ({size, weight}) => {
                 return {
-                    size: `${round(size, {digits: 1})}px`,
+                    size: `${round(size, {
+                        digits: 1,
+                    })}px`,
                     weight: html`
                         <span
                             style=${css`

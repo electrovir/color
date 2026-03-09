@@ -2,7 +2,7 @@
 
 import {getObjectTypedKeys} from '@augment-vir/common';
 import {css, defineElement, defineElementEvent, html, listen, nothing} from 'element-vir';
-import {noNativeSpacing} from 'vira';
+import {noNativeSpacing} from 'vira/dist/styles/native-styles.js';
 import {
     type ColorCoordinateName,
     type ColorFormatName,

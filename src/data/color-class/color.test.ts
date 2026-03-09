@@ -144,15 +144,31 @@ describe(Color.name, () => {
         const color = new Color('red');
         const originalDump = color.allColors;
 
-        color.set({rgb: {r: -10}});
+        color.set({
+            rgb: {
+                r: -10,
+            },
+        });
         assert.deepEquals(originalDump, color.allColors);
     });
     it('updates its values', async (testContext) => {
         const color = new Color('red');
         const originalDump = color.allColors;
 
-        color.set({hwb: {w: 10}});
-        assert.deepEquals(color.hwb, {h: 0, w: 10, b: 0}, 'properly mutated the hwb colors');
+        color.set({
+            hwb: {
+                w: 10,
+            },
+        });
+        assert.deepEquals(
+            color.hwb,
+            {
+                h: 0,
+                w: 10,
+                b: 0,
+            },
+            'properly mutated the hwb colors',
+        );
         assert.notDeepEquals(
             originalDump,
             color.allColors,
@@ -161,7 +177,9 @@ describe(Color.name, () => {
         await assertSnapshot(testContext, color.allColors);
         assert.deepEquals(
             color.allColors,
-            new Color({hwb: color.hwb}).allColors,
+            new Color({
+                hwb: color.hwb,
+            }).allColors,
             'equals a new color constructed from the same hwb values',
         );
         assert.deepEquals(

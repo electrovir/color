@@ -61,7 +61,9 @@ export const VirAllSpacesColorPicker = defineElement<{color: string}>()({
                     dispatch(new events.colorChange(event.detail));
                 })}
             ></${VirColorDetails}>
-            <${VirAllColorSpaceSliders.assign({color})}
+            <${VirAllColorSpaceSliders.assign({
+                color,
+            })}
                 ${listen(VirAllColorSpaceSliders.events.colorChange, (event) => {
                     const colorSyntax = getColorSyntaxFromCssString(state.inputColorString || '#');
                     updateState({
