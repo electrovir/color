@@ -263,7 +263,7 @@ export const VirColorPicker = defineElement<
                 })}>
                     <button
                         class="trigger"
-                        slot=${ViraPopUpTrigger.slotNames.trigger}
+                        slot=${ViraPopUpTrigger.slotNames['vira-pop-up-trigger-trigger']}
                         ${listen('mousedown', () => {
                             const storedFormat = colorLocalStorageClient.get.lastFormat();
                             if (storedFormat) {
@@ -275,7 +275,10 @@ export const VirColorPicker = defineElement<
                     >
                         ${swatchTemplate}
                     </button>
-                    <div class="pop-up" slot=${ViraPopUpTrigger.slotNames.popUp}>
+                    <div
+                        class="pop-up"
+                        slot=${ViraPopUpTrigger.slotNames['vira-pop-up-trigger-pop-up']}
+                    >
                         ${pickerTemplate}
                     </div>
                 </${ViraPopUpTrigger}>

@@ -272,8 +272,7 @@ export class Color {
                 colorValues,
             ]: [
                 ColorFormatName,
-                Partial<Record<string,
-                        number>>,
+                Partial<Record<string, number>>,
             ] = assertWrap.isDefined(
                 getObjectTypedEntries(newValue as Omit<typeof newValue, 'name' | 'hexString'>)[0],
             );
@@ -296,7 +295,11 @@ export class Color {
 
                     return assertWrap.isDefined(rawCoordValue);
                 }),
-            ) satisfies number[] as [number, number, number];
+            ) satisfies number[] as [
+                number,
+                number,
+                number,
+            ];
 
             this.setByString(
                 `${colorFormatDefinition.conversionFormat}(${orderedColorCoords.join(' ')})`,

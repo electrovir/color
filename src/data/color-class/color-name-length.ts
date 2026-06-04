@@ -53,22 +53,30 @@ export const identicalColorNames = filterObject(
  * @category Internal
  */
 export const longestIdenticalColorNames = Object.entries(identicalColorNames)
-    .reduce((longest, current): [string, string[]] => {
-        const longestString = [
-            longest[0],
-            ...longest[1],
-        ].join(', ');
-        const currentString = [
-            current[0],
-            ...current[1],
-        ].join(', ');
+    .reduce(
+        (
+            longest,
+            current,
+        ): [
+            string,
+            string[],
+        ] => {
+            const longestString = [
+                longest[0],
+                ...longest[1],
+            ].join(', ');
+            const currentString = [
+                current[0],
+                ...current[1],
+            ].join(', ');
 
-        if (currentString.length > longestString.length) {
-            return current;
-        } else {
-            return longest;
-        }
-    })
+            if (currentString.length > longestString.length) {
+                return current;
+            } else {
+                return longest;
+            }
+        },
+    )
     .reduce((combined: string[], current): string[] => {
         if (check.isArray(current)) {
             return [
