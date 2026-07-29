@@ -83,12 +83,12 @@ export const VirColorDetails = defineElement<{
                     key: 'hex',
                     value,
                 };
+            } else {
+                return {
+                    key,
+                    value,
+                };
             }
-
-            return {
-                key,
-                value,
-            };
         });
 
         if (state.inputColorString == undefined) {
@@ -97,8 +97,8 @@ export const VirColorDetails = defineElement<{
             });
         }
 
-        const {rows} = defineTable(
-            [
+        const {rows} = defineTable({
+            headers: [
                 {
                     key: 'colorFormat',
                 },
@@ -106,8 +106,8 @@ export const VirColorDetails = defineElement<{
                     key: 'formattedString',
                 },
             ],
-            getObjectTypedEntries(colorStrings),
-            ([
+            originalData: getObjectTypedEntries(colorStrings),
+            dataMap: ([
                 colorFormat,
                 value,
             ]) => {
@@ -118,7 +118,7 @@ export const VirColorDetails = defineElement<{
                     `,
                 };
             },
-        );
+        });
 
         const inputTemplate = inputs.showInput
             ? html`

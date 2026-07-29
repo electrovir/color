@@ -1,7 +1,7 @@
 /* node:coverage disable */
 
+import {type RequireAtLeastOne} from '@augment-vir/common';
 import {css, defineElement, html, unsafeCSS} from 'element-vir';
-import {type RequireAtLeastOne} from 'type-fest';
 import {type Color} from '../data/color-class/color.js';
 
 /**

@@ -17,8 +17,14 @@ export default [
              * Turn off or on specific rules. See {@link defineEslintConfig} for which plugins are
              * already enabled.
              */
-            /** This plugin is incompatible with ESLint 10 (uses removed `context.getFilename`). */
-            'monorepo-cop/no-relative-import-outside-package': 'off',
+            '@virmator/assertions-in-tests': [
+                'error',
+                {
+                    additionalAssertionNames: [
+                        'assertSnapshot',
+                    ],
+                },
+            ],
         },
     },
 ];

@@ -22,10 +22,12 @@ import {VirColorSwatch} from './vir-color-swatch.element.js';
 
 const colorFormatOptions: ReadonlyArray<Readonly<ViraSelectOption>> = getObjectTypedValues(
     ColorFormatName,
-).map((formatName) => ({
-    value: formatName,
-    label: formatName.toUpperCase(),
-}));
+).map((formatName) => {
+    return {
+        value: formatName,
+        label: formatName.toUpperCase(),
+    };
+});
 
 /**
  * A color picker element with a swatch that opens a popup with color format sliders.

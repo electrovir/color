@@ -135,8 +135,8 @@ export const VirColorPairContrastSummary = defineElement<{
             foreground: new Color(inputs.foregroundColor).toCss().rgb,
         });
 
-        const {rows: colorPairRows} = defineTable(
-            [
+        const {rows: colorPairRows} = defineTable({
+            headers: [
                 {
                     key: 'colorLayer',
                 },
@@ -144,12 +144,12 @@ export const VirColorPairContrastSummary = defineElement<{
                     key: 'colorValue',
                 },
             ],
-            getObjectTypedEntries({
+            originalData: getObjectTypedEntries({
                 'Foreground:': new Color(inputs.foregroundColor).toFormattedStrings().hexString,
                 'Background:': new Color(inputs.backgroundColor).toFormattedStrings().hexString,
                 'Contrast:': `${contrast.contrast} Lc`.padEnd(9, ' '),
             }),
-            ([
+            dataMap: ([
                 colorLayer,
                 value,
             ]) => {
@@ -160,10 +160,10 @@ export const VirColorPairContrastSummary = defineElement<{
                     `,
                 };
             },
-        );
+        });
 
-        const {rows: weightRows} = defineTable(
-            [
+        const {rows: weightRows} = defineTable({
+            headers: [
                 {
                     key: 'weight',
                 },
@@ -171,7 +171,7 @@ export const VirColorPairContrastSummary = defineElement<{
                     key: 'size',
                 },
             ],
-            Object.entries(contrast.fontSizes).map(
+            originalData: Object.entries(contrast.fontSizes).map(
                 ([
                     weight,
                     size,
@@ -182,7 +182,7 @@ export const VirColorPairContrastSummary = defineElement<{
                     };
                 },
             ),
-            ({size, weight}) => {
+            dataMap: ({size, weight}) => {
                 return {
                     size: `${round(size, {
                         digits: 1,
@@ -198,10 +198,10 @@ export const VirColorPairContrastSummary = defineElement<{
                     `,
                 };
             },
-        );
+        });
 
-        const {rows: levelRows} = defineTable(
-            [
+        const {rows: levelRows} = defineTable({
+            headers: [
                 {
                     key: 'boundaryLc',
                 },
@@ -209,14 +209,14 @@ export const VirColorPairContrastSummary = defineElement<{
                     key: 'levelName',
                 },
             ],
-            contrastLevels,
-            (contrastLevel) => {
+            originalData: contrastLevels,
+            dataMap: (contrastLevel) => {
                 return {
                     boundaryLc: `${contrastLevel.min} Lc`,
                     levelName: contrastLevelLabel[contrastLevel.name],
                 };
             },
-        );
+        });
 
         return html`
             <div class="color-overlay">

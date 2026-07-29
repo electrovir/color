@@ -10,6 +10,7 @@ import {
     round,
     type AnyObject,
     type PartialWithUndefined,
+    type RequireExactlyOne,
 } from '@augment-vir/common';
 import colorNames from 'color-name';
 import {
@@ -20,7 +21,6 @@ import {
     parse,
     type Color as CuloriColor,
 } from 'culori';
-import {type RequireExactlyOne} from 'type-fest';
 import {
     ColorFormatName,
     colorFormats,

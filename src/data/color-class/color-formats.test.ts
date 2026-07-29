@@ -9,7 +9,7 @@ import {
 
 describe('HexColor', () => {
     it('is compatible with hex color strings', () => {
-        const testAssignment: HexColor = '#ffffff';
+        assert.tsType<'#ffffff'>().matches<HexColor>();
     });
 });
 
