@@ -36,32 +36,34 @@ export const VirColorSlider = defineElement<{
     cssVars: {
         'vir-color-slider-gradient': 'black',
     },
-    styles: ({cssVars}) => css`
-        :host {
-            display: flex;
-            align-items: center;
-            font-family: ${viraFontCssVars['vira-monospace'].value};
-            gap: 2px;
-        }
+    styles: ({cssVars}) => {
+        return css`
+            :host {
+                display: flex;
+                align-items: center;
+                font-family: ${viraFontCssVars['vira-monospace'].value};
+                gap: 2px;
+            }
 
-        input[type='range'] {
-            flex-grow: 1;
-            appearance: none;
-            background: ${cssVars['vir-color-slider-gradient'].value};
-            height: 9px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+            input[type='range'] {
+                flex-grow: 1;
+                appearance: none;
+                background: ${cssVars['vir-color-slider-gradient'].value};
+                height: 9px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
 
-        ${ViraInput} {
-            width: 76px;
-        }
+            ${ViraInput} {
+                width: 76px;
+            }
 
-        .coordinate {
-            font-size: 18px;
-            margin-top: -4px;
-        }
-    `,
+            .coordinate {
+                font-size: 18px;
+                margin-top: -4px;
+            }
+        `;
+    },
     events: {
         valueChange: defineElementEvent<number>(),
     },

@@ -38,7 +38,9 @@ export const VirDemo = defineElement()({
                     basePath: 'color',
                 },
             })}>
-                <h1 slot=${ElementBookApp.slotNames.navHeader}>@electrovir/color</h1>
+                <h1 slot=${ElementBookApp.slotNames['element-book-app-nav-header']}>
+                    @electrovir/color
+                </h1>
             </${ElementBookApp}>
         `;
     },

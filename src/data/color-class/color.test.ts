@@ -119,7 +119,12 @@ describe(Color.name, () => {
     });
     it('clones itself', () => {
         const originalColor = new Color('#583758');
-        assert.deepEquals(originalColor.clone(), originalColor);
+        const clonedColor = originalColor.clone();
+        assert.deepEquals(clonedColor, originalColor);
+        assert.strictEquals(
+            clonedColor.getRgbDistance('black'),
+            originalColor.getRgbDistance('black'),
+        );
     });
     it('accurately serializes', async (testContext) => {
         const originalColor = new Color('#583758');

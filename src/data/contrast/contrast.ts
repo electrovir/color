@@ -63,10 +63,12 @@ export const fontWeightToName = Object.fromEntries(
         ([
             key,
             value,
-        ]) => [
-            value,
-            key,
-        ],
+        ]) => {
+            return [
+                value,
+                key,
+            ];
+        },
     ),
 ) as {
     [Weight in Values<typeof fontWeightByName>]: ExtractKeysWithMatchingValues<

@@ -66,98 +66,100 @@ export const VirColorPicker = defineElement<
     hostClasses: {
         'vir-color-picker-always-show': ({inputs}) => !!inputs.alwaysShowPicker,
     },
-    styles: ({cssVars, hostClasses}) => css`
-        :host {
-            display: inline-flex;
-        }
+    styles: ({cssVars, hostClasses}) => {
+        return css`
+            :host {
+                display: inline-flex;
+            }
 
-        ${hostClasses['vir-color-picker-always-show'].selector} {
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
+            ${hostClasses['vir-color-picker-always-show'].selector} {
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+            }
 
-        button {
-            ${noNativeFormStyles}
-            cursor: pointer;
-            display: flex;
-        }
+            button {
+                ${noNativeFormStyles}
+                cursor: pointer;
+                display: flex;
+            }
 
-        ${ViraPopUpTrigger} {
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-        }
-
-        .swatch-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            align-items: center;
-
-            & ${VirColorSwatch} {
-                width: ${cssVars['vir-color-picker-swatch-width'].value};
-                height: ${cssVars['vir-color-picker-swatch-height'].value};
+            ${ViraPopUpTrigger} {
+                width: 100%;
+                height: 100%;
                 box-sizing: border-box;
             }
-        }
 
-        .code-button {
-            font-family: ${viraFontCssVars['vira-monospace'].value};
-            font-size: 12px;
-            color: #666;
-            display: flex;
-            justify-content: center;
-            gap: 2px;
-            align-items: center;
+            .swatch-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                align-items: center;
 
-            & ${ViraIcon} {
-                width: 18px;
-                aspect-ratio: 1;
+                & ${VirColorSwatch} {
+                    width: ${cssVars['vir-color-picker-swatch-width'].value};
+                    height: ${cssVars['vir-color-picker-swatch-height'].value};
+                    box-sizing: border-box;
+                }
             }
 
-            &:hover {
-                color: #000;
+            .code-button {
+                font-family: ${viraFontCssVars['vira-monospace'].value};
+                font-size: 12px;
+                color: #666;
+                display: flex;
+                justify-content: center;
+                gap: 2px;
+                align-items: center;
+
+                & ${ViraIcon} {
+                    width: 18px;
+                    aspect-ratio: 1;
+                }
+
+                &:hover {
+                    color: #000;
+                }
+
+                &:active {
+                    color: dodgerblue;
+                }
             }
 
-            &:active {
-                color: dodgerblue;
+            .picker {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                padding: 16px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 8px;
             }
-        }
 
-        .picker {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding: 16px;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        .pop-up .picker {
-            ${viraShadows.menuShadow}
-        }
-
-        .raw-input-wrapper {
-            text-align: left;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 12px;
-            ${viraFormCssVars['vira-form-border-color'].name}: #ddd;
-            color: #666;
-
-            & ${ViraInput} {
-                flex-grow: 1;
-                width: unset;
-                color: inherit;
-                height: 20px;
-                border: none;
+            .pop-up .picker {
+                ${viraShadows.menuShadow}
             }
-        }
-    `,
+
+            .raw-input-wrapper {
+                text-align: left;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                font-size: 12px;
+                ${viraFormCssVars['vira-form-border-color'].name}: #ddd;
+                color: #666;
+
+                & ${ViraInput} {
+                    flex-grow: 1;
+                    width: unset;
+                    color: inherit;
+                    height: 20px;
+                    border: none;
+                }
+            }
+        `;
+    },
     events: {
         colorChange: defineElementEvent<string>(),
     },

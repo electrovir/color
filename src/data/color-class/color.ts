@@ -112,7 +112,7 @@ export class Color {
      */
     public static deserialize(this: void, input: string) {
         const parsed = JSON.parse(input) as SerializedColor;
-        const newColor = new Color('black');
+        const newColor = new Color(parsed.hexString);
         getObjectTypedEntries(parsed).forEach(
             ([
                 key,
@@ -135,7 +135,7 @@ export class Color {
 
     /** Get the distance from this Color class instance to the given CSS color string. */
     public getRgbDistance(distanceFrom: string) {
-        return distanceRgb(this.#internalColor, distanceFrom);
+        return distanceRgb(this.internalColor, distanceFrom);
     }
 
     /** Get the closest named CSS color to this Color class instance's current color. */
@@ -170,7 +170,7 @@ export class Color {
 
     /** The color syntax the this color was set with. */
     protected originalColorSyntax: ColorSyntaxName = ColorSyntaxName.hex;
-    #internalColor: CuloriColor = assertWrap.isDefined(parse('black'));
+    protected internalColor: CuloriColor = assertWrap.isDefined(parse('black'));
     /** All current color values. These are updated whenever {@link Color.set} is called. */
     protected readonly _allColors = {
         names: ['black'] as string[],
@@ -244,7 +244,7 @@ export class Color {
         }
         this.originalColorSyntax = getColorSyntaxFromCssString(cssColorString);
 
-        this.#internalColor = newColor;
+        this.internalColor = newColor;
         this.pullFromInternalColor();
     }
 
@@ -315,20 +315,20 @@ export class Color {
         getEnumValues(ColorFormatName).forEach((colorFormatName) => {
             const colorFormatDefinition = colorFormats[colorFormatName];
             const mappedColorFormatName = colorFormatDefinition.conversionFormat;
-            const originalColorDefinition = check.isKeyOf(this.#internalColor.mode, colorFormats)
-                ? colorFormats[this.#internalColor.mode]
+            const originalColorDefinition = check.isKeyOf(this.internalColor.mode, colorFormats)
+                ? colorFormats[this.internalColor.mode]
                 : undefined;
 
             const converted = clampGamut(
                 colorFormatDefinition.colorSpace === originalColorDefinition?.colorSpace
                     ? mappedColorFormatName
                     : 'rgb',
-            )(converter(mappedColorFormatName)(this.#internalColor));
+            )(converter(mappedColorFormatName)(this.internalColor));
 
             /* node:coverage ignore next 5: technically this shouldn't happen, idk how to manually trigger it. */
             if (!converted) {
                 assert.never(
-                    `Failed to convert color '${JSON.stringify(this.#internalColor)}' to '${colorFormatName}'.`,
+                    `Failed to convert color '${JSON.stringify(this.internalColor)}' to '${colorFormatName}'.`,
                 );
             }
 
@@ -353,7 +353,7 @@ export class Color {
             });
         });
 
-        this._allColors.hexString = formatHex(this.#internalColor) as HexColor;
+        this._allColors.hexString = formatHex(this.internalColor) as HexColor;
         this._allColors.names = findMatchingColorNames(this.rgb);
         this._allColors[ColorSyntaxName.name] = this._allColors.names[0] || '';
     }

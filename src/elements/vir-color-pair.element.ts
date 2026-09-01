@@ -28,97 +28,100 @@ export const VirColorPair = defineElement<{
         };
     },
     hostClasses: {
-        'vir-color-pair-no-contrast-tips': ({inputs, state}) =>
-            !inputs.showContrast && !state.forceShowEverything,
+        'vir-color-pair-no-contrast-tips': ({inputs, state}) => {
+            return !inputs.showContrast && !state.forceShowEverything;
+        },
     },
-    styles: ({hostClasses}) => css`
-        :host {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 100%;
-        }
-
-        .color-preview {
-            ${noNativeFormStyles};
-            cursor: pointer;
-            font-size: 32px;
-            padding-left: 12px;
-            padding-right: 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            display: flex;
-            gap: 8px;
-            align-items: baseline;
-
-            & b {
-                margin: 12px 0;
-                font-weight: bold;
-                text-decoration: underline;
+    styles: ({hostClasses}) => {
+        return css`
+            :host {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                max-width: 100%;
             }
 
-            & .square {
-                margin: 12px 0;
-                width: 24px;
-                height: 24px;
-                background-color: currentColor;
+            .color-preview {
+                ${noNativeFormStyles};
+                cursor: pointer;
+                font-size: 32px;
+                padding-left: 12px;
+                padding-right: 0;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                display: flex;
+                gap: 8px;
+                align-items: baseline;
+
+                & b {
+                    margin: 12px 0;
+                    font-weight: bold;
+                    text-decoration: underline;
+                }
+
+                & .square {
+                    margin: 12px 0;
+                    width: 24px;
+                    height: 24px;
+                    background-color: currentColor;
+                }
             }
-        }
-        ${hostClasses['vir-color-pair-no-contrast-tips'].selector} {
-            & .needed-size-wrapper {
-                display: none;
+            ${hostClasses['vir-color-pair-no-contrast-tips'].selector} {
+                & .needed-size-wrapper {
+                    display: none;
+                }
+
+                & .color-preview {
+                    padding: 4px 24px;
+                }
             }
 
-            & .color-preview {
-                padding: 4px 24px;
+            .needed-size-wrapper {
+                align-self: stretch;
+                width: 56px;
+                position: relative;
+                overflow: hidden;
+                border-left: 1px solid #ccc;
             }
-        }
 
-        .needed-size-wrapper {
-            align-self: stretch;
-            width: 56px;
-            position: relative;
-            overflow: hidden;
-            border-left: 1px solid #ccc;
-        }
+            .needed-size {
+                top: 0;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                left: 6px;
+                position: absolute;
 
-        .needed-size {
-            top: 0;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            left: 6px;
-            position: absolute;
-
-            & span {
-                margin: 0 auto;
+                & span {
+                    margin: 0 auto;
+                }
             }
-        }
 
-        .css-var-names {
-            font-family: ${viraFontCssVars['vira-monospace'].value};
-            display: flex;
-            max-width: 100%;
-            flex-direction: column;
-            opacity: 0.6;
-            margin-top: 4px;
-        }
-
-        p {
-            ${noNativeSpacing};
-            display: flex;
-            gap: 0;
-            flex-wrap: wrap;
-
-            & span:last-child {
-                margin-left: 1ex;
+            .css-var-names {
+                font-family: ${viraFontCssVars['vira-monospace'].value};
+                display: flex;
+                max-width: 100%;
+                flex-direction: column;
+                opacity: 0.6;
+                margin-top: 4px;
             }
-        }
 
-        ${VirContrastIndicator} {
-            margin-top: 1px;
-        }
-    `,
+            p {
+                ${noNativeSpacing};
+                display: flex;
+                gap: 0;
+                flex-wrap: wrap;
+
+                & span:last-child {
+                    margin-left: 1ex;
+                }
+            }
+
+            ${VirContrastIndicator} {
+                margin-top: 1px;
+            }
+        `;
+    },
     render({state, updateState, inputs}) {
         const colorRows = (
             [
