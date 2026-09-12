@@ -2,7 +2,6 @@
 
 import {ElementBookApp} from 'element-book';
 import {css, defineElement, html} from 'element-vir';
-import {noNativeSpacing} from 'vira/dist/styles/native-styles.js';
 import {allBookPages} from './all-book-pages.js';
 
 export const VirDemo = defineElement()({
@@ -23,7 +22,8 @@ export const VirDemo = defineElement()({
         }
 
         h1 {
-            ${noNativeSpacing};
+            padding: 0;
+            margin: 0;
             font-size: 16px;
             margin-bottom: 16px;
             text-align: center;
