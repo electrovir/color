@@ -1,6 +1,6 @@
 {
     "name": "@electrovir/color",
-    "version": "2.0.0-beta.0",
+    "version": "2.0.0",
     "description": "A wrapper for culori with an extremely simple API.",
     "keywords": [
         "color",
@@ -53,9 +53,9 @@
         "@electrovir/color": "file:./"
     },
     "dependencies": {
-        "@augment-vir/assert": "^32.3.0-beta.0",
-        "@augment-vir/common": "^32.3.0-beta.0",
-        "@augment-vir/web": "^32.3.0-beta.0",
+        "@augment-vir/assert": "^32.3.0",
+        "@augment-vir/common": "^32.3.0",
+        "@augment-vir/web": "^32.3.0",
         "@electrovir/local-storage-client": "^0.1.1",
         "apca-w3": "^0.1.9",
         "color-name": "^2.1.1",
@@ -63,7 +63,7 @@
         "object-shape-tester": "^6.15.0"
     },
     "devDependencies": {
-        "@augment-vir/test": "^32.3.0-beta.0",
+        "@augment-vir/test": "^32.3.0",
         "@eslint/eslintrc": "^3.3.7",
         "@eslint/js": "10.0.1",
         "@stylistic/eslint-plugin": "^5.10.0",
@@ -78,8 +78,8 @@
         "@web/test-runner-visual-regression": "^1.0.1",
         "cspell": "^10.2.0",
         "dependency-cruiser": "^18.2.0",
-        "element-book": "^27.0.0-beta.1",
-        "element-vir": "27.0.0-beta.3",
+        "element-book": "^27.0.0-beta.3",
+        "element-vir": "27.0.0",
         "esbuild": "^0.28.2",
         "eslint": "^10.9.1",
         "eslint-config-prettier": "^10.1.8",
@@ -111,7 +111,7 @@
         "vite": "^8.2.2"
     },
     "peerDependencies": {
-        "element-vir": "^27.0.0-beta.3",
+        "element-vir": "^27.0.0",
         "lit-css-vars": ">=3"
     },
     "engines": {
